@@ -1,0 +1,167 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Merriweather:wght@400;700&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Paper Styling */
+.notepad-container {
+  perspective: 1000px;
+}
+
+.secret-note {
+  border-radius: 2px;
+  box-shadow: 
+    0 4px 6px -1px rgba(0, 0, 0, 0.1),
+    0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  position: relative;
+  transition: all 0.3s ease;
+  transform: rotateX(2deg);
+}
+
+.secret-note:hover {
+  box-shadow: 
+    0 10px 15px -3px rgba(0, 0, 0, 0.1),
+    0 4px 6px -2px rgba(0, 0, 0, 0.05);
+  transform: rotateX(0deg) translateY(-2px);
+}
+
+/* Paper Lines */
+.notepad-lines {
+  position: relative;
+  padding: 0 1rem;
+}
+
+.notepad-lines::after {
+  content: "";
+  position: absolute;
+  top: 29px;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: #e5e5e5;
+  box-shadow: 0 30px 0 #e5e5e5, 0 60px 0 #e5e5e5, 0 90px 0 #e5e5e5, 
+              0 120px 0 #e5e5e5, 0 150px 0 #e5e5e5, 0 180px 0 #e5e5e5,
+              0 210px 0 #e5e5e5, 0 240px 0 #e5e5e5, 0 270px 0 #e5e5e5;
+  pointer-events: none;
+}
+
+.dark-notepad-lines {
+  position: relative;
+  padding: 0 1rem;
+}
+
+.dark-notepad-lines::after {
+  content: "";
+  position: absolute;
+  top: 29px;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: rgba(75, 85, 99, 0.3);
+  box-shadow: 0 30px 0 rgba(75, 85, 99, 0.3), 0 60px 0 rgba(75, 85, 99, 0.3), 
+              0 90px 0 rgba(75, 85, 99, 0.3), 0 120px 0 rgba(75, 85, 99, 0.3),
+              0 150px 0 rgba(75, 85, 99, 0.3), 0 180px 0 rgba(75, 85, 99, 0.3),
+              0 210px 0 rgba(75, 85, 99, 0.3), 0 240px 0 rgba(75, 85, 99, 0.3),
+              0 270px 0 rgba(75, 85, 99, 0.3);
+  pointer-events: none;
+}
+
+/* macOS style note */
+.mac-note {
+  border-radius: 12px;
+  box-shadow: 
+    0 2px 4px rgba(0, 0, 0, 0.05),
+    0 4px 8px rgba(0, 0, 0, 0.05),
+    0 8px 16px rgba(0, 0, 0, 0.05),
+    0 16px 32px rgba(0, 0, 0, 0.05);
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+/* Canvas texture for light/dark mode */
+.secret-note.light-mode {
+  background: rgba(255, 255, 255, 0.9);
+  background-image: 
+    linear-gradient(to right, rgba(220, 220, 220, 0.1) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(220, 220, 220, 0.1) 1px, transparent 1px);
+  background-size: 20px 20px;
+}
+
+.secret-note.dark-mode {
+  background: rgba(23, 23, 23, 0.9);
+  background-image: 
+    linear-gradient(to right, rgba(255, 255, 255, 0.05) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(255, 255, 255, 0.05) 1px, transparent 1px);
+  background-size: 20px 20px;
+}
+
+/* Editor Styling */
+.ProseMirror {
+  outline: none;
+  min-height: 300px;
+}
+
+.ProseMirror p {
+  margin: 0;
+  line-height: 30px;
+  min-height: 30px;
+  padding: 0;
+}
+
+.ProseMirror p:first-child {
+  margin-top: -2px;
+}
+
+/* Editor cursor */
+.ProseMirror {
+  caret-color: currentColor;
+}
+
+.ProseMirror:not(:focus-within) {
+  caret-color: transparent;
+}
+
+@keyframes blink {
+  50% { opacity: 0; }
+}
+
+/* Word Animation */
+.ProseMirror p span {
+  display: inline-block;
+  animation: fadeInWord 0.3s ease-out forwards;
+  opacity: 0;
+  transform: translateY(8px);
+}
+
+@keyframes fadeInWord {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Theme Transitions */
+.secret-note {
+  transition: background-color 0.3s ease, color 0.3s ease, box-shadow 0.3s ease;
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: rgba(0, 0, 0, 0.03);
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(0, 0, 0, 0.1);
+  border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(0, 0, 0, 0.15);
+}
+
+
