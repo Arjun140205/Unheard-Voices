@@ -1,17 +1,11 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { useEditor, EditorContent } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
-import bgImage from "../assets/bg.jpg";
+import writingBg from "../assets/writing.jpg";
 
 const Write = () => {
   const [title, setTitle] = useState("");
   const [isDark, setIsDark] = useState(false);
-  const [background, setBackground] = useState(bgImage);
-
-  // Update background when theme changes
-  useEffect(() => {
-    setBackground(bgImage);
-  }, [isDark]);
   
   const editor = useEditor({
     extensions: [StarterKit],
@@ -35,31 +29,18 @@ const Write = () => {
   };
 
   return (
-    <div className="relative min-h-screen flex items-center justify-center p-6">
-      {/* Background with gradient */}
-      <div
-        className="absolute inset-0 -z-10"
-        style={{
-          backgroundImage: `url(${background})`,
-          backgroundSize: "cover",
-          backgroundPosition: "center",
-          backgroundAttachment: "fixed",
-        }}
-      />
-
-      {/* Gradient Overlay */}
-      <div 
-        className={`absolute inset-0 -z-10 transition-opacity duration-500 ${
-          isDark 
-            ? 'bg-gradient-to-b from-gray-900/90 to-black/90' 
-            : 'bg-gradient-to-b from-white/10 via-white/30 to-white/50'
-        }`}
-      />
-
-      <div className="w-full max-w-xl">
+    <div 
+      className="min-h-screen py-16 px-6"
+      style={{
+        backgroundImage: `url(${writingBg})`,
+        backgroundSize: 'cover',
+        backgroundPosition: 'center',
+        backgroundRepeat: 'no-repeat',
+      }}
+    >
+      <div className="max-w-xl mx-auto">
         <form onSubmit={handleSubmit} className="space-y-4">
-          <div className="notepad-container">
-            {/* MacOS style note with canvas texture */}
+          <div className="notepad-container backdrop-blur-sm">
             <div className={`secret-note mac-note p-6 relative transition-all duration-300 ${
               isDark 
                 ? 'dark-mode text-gray-100 bg-gray-900/90' 
@@ -117,10 +98,10 @@ const Write = () => {
           <div className="flex justify-center mt-8">
             <button
               type="submit"
-              className={`story-btn group relative px-8 py-3 rounded-2xl transform transition-all duration-300 ease-in-out font-medium text-base hover:-translate-y-0.5 overflow-hidden ${
+              className={`story-btn group relative px-8 py-3 rounded-2xl transform transition-all duration-300 ease-in-out font-medium text-base hover:-translate-y-0.5 overflow-hidden backdrop-blur-md ${
                 isDark 
-                  ? 'bg-gradient-to-r from-gray-100 to-white text-gray-900' 
-                  : 'bg-gradient-to-r from-gray-900 to-gray-800 text-white'
+                  ? 'bg-white/90 text-gray-900' 
+                  : 'bg-gray-900/90 text-white'
               }`}
             >
               <span className="relative z-10">Share Your Story</span>
