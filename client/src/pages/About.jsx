@@ -38,7 +38,7 @@ const About = () => {
           <div className="bg-gray-50 p-8 rounded-lg my-12">
             <p className="text-xl font-medium text-center">
               No likes. No shares. No pressure.<br />
-              Just stories that speak to the soul — from strangers who feel like friends.
+              Just stories that speak to the soul, from strangers who feel like friends.
             </p>
           </div>
 
