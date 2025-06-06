@@ -1,120 +1,130 @@
-import React from 'react';
-import { Link } from 'react-router-dom';
+import React from "react";
+import { Link } from "react-router-dom";
 
 const About = () => {
   return (
-    <article className="max-w-[900px] mx-auto px-4 py-16 sm:py-24">
-      <header className="text-center mb-16">
-        <h1 className="text-[32px] sm:text-[40px] font-serif font-bold mb-6 text-gray-900 leading-tight">
-          Everyone carries a voice waiting to be heard
+    <article className="max-w-3xl mx-auto px-4 py-20 sm:py-32">
+      <header className="text-center mb-20">
+        <h1 className="text-4xl sm:text-5xl font-serif font-bold text-gray-900 leading-tight">
+          Some voices were never meant to echo in silence.
         </h1>
+        <p className="mt-6 text-lg text-gray-600">
+          Welcome to the place where words don’t need permission to matter.
+        </p>
       </header>
 
-      <div className="space-y-8 text-gray-800">
-        <section className="prose prose-lg max-w-none">
-          
+      <section className="space-y-10 text-gray-800 text-lg leading-relaxed">
+        <p>
+          Unheard Voices isn’t just a platform — it’s a soft place to land.
+        </p>
 
-           <p className="text-xl leading-relaxed mb-8">
-            In a world obsessed with profiles, filters, and followers, Unheard Voices offers something rare: freedom without judgment. 
-            You don't need fame, perfection, or approval to write here. Just your truth: raw, real, and resonant.
+        <p>
+          No likes. No algorithms. No “you should post this instead.”
+          <br />
+          Just stories that hit where it hurts, heals, and stays.
+        </p>
+
+        <p>
+          Whether you’re feeling too much or nothing at all —
+          <br />
+          this space was made for you.
+        </p>
+
+        <blockquote className="border-l-4 border-black pl-5 text-gray-700 italic">
+          The most important stories are often the ones we never get to tell.
+        </blockquote>
+
+        <p>
+          Here, you don’t need to be a writer. You just need to be honest.
+          <br />
+          Journal entries. Midnight thoughts. Open letters to no one.
+          <br />
+          They all belong here.
+        </p>
+
+        <div className="bg-gray-50 p-8 rounded-xl shadow-md text-center my-16">
+          <p className="text-xl text-gray-900 font-medium">
+            Write without a following. <br />
+            Read without scrolling. <br />
+            Connect without pretending.
           </p>
+        </div>
 
-          <blockquote className="border-l-4 border-gray-900 pl-4 my-8 italic">
-            We believe the most profound stories are the ones we're afraid to tell.
-          </blockquote>
+        <hr className="border-t border-gray-300 my-10" />
 
-          <p className="text-lg leading-relaxed mb-12">
-            This platform exists for the things you couldn't say out loud, the feelings you couldn't explain in a crowd, 
-            the memories that shaped you when no one was watching. Whether you're healing from heartbreak, navigating loneliness, 
-            celebrating small victories, or just trying to understand yourself a little better — this is your space.
-          </p>
+        <h2 className="text-2xl sm:text-3xl font-serif font-semibold mt-16 mb-6">
+          For the ones who feel too much
+        </h2>
 
-          <h2 className="text-2xl font-serif font-bold mt-12 mb-6">A quiet corner in a noisy world</h2>
-          <p className="text-lg leading-relaxed mb-8">
-            The internet moves fast. But healing, empathy, and connection take time. Unheard Voices was built to slow things down — 
-            to make space for depth over drama, connection over clout.
-          </p>
+        <p>
+          You don’t need to write a bestseller to be understood.
+          <br />
+          You don’t need a platform to be heard.
+          <br />
+          You just need a place that listens.
+        </p>
 
-          <div className="bg-gray-50 p-8 rounded-lg my-12">
-            <p className="text-xl font-medium text-center">
-              No likes. No shares. No pressure.<br />
-              Just stories that speak to the soul, from strangers who feel like friends.
+        <div className="grid md:grid-cols-2 gap-12 mt-16">
+          <div className="text-center space-y-6 p-8 bg-white shadow-lg rounded-xl">
+            <h3 className="text-2xl font-serif font-bold">Writers</h3>
+            <p>
+              Pour it out — the messy, the raw, the healing.
+              <br />
+              This is where vulnerability isn’t weakness. It’s art.
             </p>
+            <Link
+              to="/write"
+              className="inline-block mt-4 px-6 py-3 border-2 border-gray-900 text-gray-900 hover:bg-gray-900 hover:text-white transition rounded-full"
+            >
+              Start Writing
+            </Link>
           </div>
 
-          {/* For Writers and Readers section with partition */}
-          <div className="relative my-16">
-            <div className="absolute left-1/2 top-0 bottom-0 w-px bg-gray-200 transform -translate-x-1/2"></div>
-            <div className="grid md:grid-cols-2 gap-12">
-              <div className="p-8">
-                <div className="max-w-xs mx-auto">
-                  <h3 className="text-2xl font-serif font-bold mb-6 text-center">For Writers</h3>
-                  <p className="text-lg leading-relaxed text-gray-700">
-                    Write without fear. Share without judgment. Connect without pretense. 
-                    Whether you're sharing a personal story, exploring an idea, or processing your thoughts, 
-                    this is your space to be heard.
-                  </p>
-                  <div className="mt-8 text-center">
-                    <Link 
-                      to="/write"
-                      className="inline-block px-6 py-2 border-2 border-gray-900 text-gray-900 hover:bg-gray-900 hover:text-white transition-colors duration-200 rounded-full text-lg"
-                    >
-                      Start Writing
-                    </Link>
-                  </div>
-                </div>
-              </div>
-
-              <div className="p-8">
-                <div className="max-w-xs mx-auto">
-                  <h3 className="text-2xl font-serif font-bold mb-6 text-center">For Readers</h3>
-                  <p className="text-lg leading-relaxed text-gray-700">
-                    Discover stories that resonate, perspectives that challenge, and voices that inspire. 
-                    Here, you'll find authentic human experiences that remind us we're all connected.
-                  </p>
-                  <div className="mt-8 text-center">
-                    <Link 
-                      to="/explore"
-                      className="inline-block px-6 py-2 border-2 border-gray-900 text-gray-900 hover:bg-gray-900 hover:text-white transition-colors duration-200 rounded-full text-lg"
-                    >
-                      Start Reading
-                    </Link>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <h2 className="text-2xl font-serif font-bold mt-12 mb-6">Built on empathy, not ego</h2>
-          <p className="text-lg leading-relaxed mb-8">
-            We don't track your clicks. We don't sell your data. We don't push content based on algorithms.
-            Instead, we're creating a home for those who write to feel, not to perform.
-          </p>
-
-          <div className="my-12">
-            <h3 className="text-xl font-serif font-bold mb-4">Our mission is simple:</h3>
-            <p className="text-xl leading-relaxed italic">
-              To give every unheard story a place to be seen — and every silent writer a chance to be felt.
+          <div className="text-center space-y-6 p-8 bg-white shadow-lg rounded-xl">
+            <h3 className="text-2xl font-serif font-bold">Readers</h3>
+            <p>
+              Read what people never post on Instagram.
+              <br />
+              Real moments. Unedited thoughts. Souls on paper.
             </p>
+            <Link
+              to="/explore"
+              className="inline-block mt-4 px-6 py-3 border-2 border-gray-900 text-gray-900 hover:bg-gray-900 hover:text-white transition rounded-full"
+            >
+              Start Reading
+            </Link>
           </div>
+        </div>
 
-          <h2 className="text-2xl font-serif font-bold mt-12 mb-6">Who writes here?</h2>
-          <p className="text-xl font-medium mb-4">You do.</p>
-          <p className="text-lg leading-relaxed mb-12">
-            So do students, survivors, wanderers, dreamers, rebels, caretakers, and anyone else who has a truth they've been carrying. 
-            Some write to heal. Others write to help. All write to be human.
-          </p>
-        </section>
+        <hr className="border-t border-gray-300 my-20" />
 
-        <div className="border-t border-gray-200 pt-12 mt-16 text-center">
-          <Link 
-            to="/write" 
-            className="inline-block bg-gray-900 text-white px-8 py-3 rounded-full text-lg font-medium hover:bg-gray-800 transition-colors duration-200"
+        <h2 className="text-2xl sm:text-3xl font-serif font-semibold mt-20 mb-6">
+          This isn’t a product. It’s a promise.
+        </h2>
+
+        <p>
+          We don’t track your clicks. We don’t sell your story. We don’t push what trends.
+          <br />
+          We’re not here for engagement — we’re here for connection.
+        </p>
+
+        <p>
+          If something inside you needs to speak, whisper, cry, confess, or simply exist — let it out.
+        </p>
+
+        <p className="text-xl font-medium text-center mt-16">
+          And when you’re ready…
+        </p>
+
+        <div className="text-center mt-8">
+          <Link
+            to="/write"
+            className="inline-block bg-gray-900 text-white px-10 py-4 text-lg font-semibold rounded-full hover:bg-gray-800 transition"
           >
-            Start Writing Your Story
+            Write Something Real
           </Link>
         </div>
-      </div>
+      </section>
     </article>
   );
 };
