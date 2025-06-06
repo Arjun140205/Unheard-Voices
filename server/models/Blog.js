@@ -1,19 +1,11 @@
-// server/models/Blog.js
-const mongoose = require("mongoose");
+import mongoose from 'mongoose';
 
 const blogSchema = new mongoose.Schema({
-  tag: {
-    type: String,
-    required: true,
-  },
-  content: {
-    type: String,
-    required: true,
-  },
-  createdAt: {
-    type: Date,
-    default: Date.now,
-  },
+  title: { type: String, required: true },
+  content: { type: String, required: true },
+  isAnonymous: { type: Boolean, default: true },
+  createdAt: { type: Date, default: Date.now }
 });
 
-module.exports = mongoose.model("Blog", blogSchema);
+const Blog = mongoose.model('Blog', blogSchema);
+export default Blog;
