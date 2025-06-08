@@ -7,6 +7,7 @@ import ConfirmationModal from "../components/ConfirmationModal";
 
 const Write = () => {
   const [title, setTitle] = useState("");
+  const [tags, setTags] = useState(""); // NEW: for tag input
   const [isDark, setIsDark] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [message, setMessage] = useState("");
@@ -24,32 +25,36 @@ const Write = () => {
     },
   });
 
-  // Show confirmation modal when user clicks "Share Your Story"
   const handleShareClick = (e) => {
     e.preventDefault();
-    if (!title.trim() || !editor) return; // prevent if no content or title
+    if (!title.trim() || !editor) return;
     setIsModalOpen(true);
   };
 
-  // Confirm publishing after modal confirmation
   const handleConfirm = async () => {
     setIsModalOpen(false);
     if (!editor || !title.trim()) return;
 
     const content = editor.getHTML();
+    const parsedTags = tags
+      .split(",")
+      .map((tag) => tag.trim())
+      .filter((tag) => tag !== "");
 
     try {
       setIsSubmitting(true);
       setMessage("");
 
-      const res = await axios.post("http://localhost:6000/api/blogs", {
+      const res = await axios.post("http://localhost:4000/api/blogs", {
         title,
         content,
+        tags: parsedTags,
       });
 
       if (res.status === 201) {
         setMessage("✅ Your anonymous story was shared successfully!");
         setTitle("");
+        setTags(""); // Reset tags input
         editor.commands.clearContent();
       } else {
         setMessage("❌ Something went wrong. Please try again.");
@@ -62,7 +67,6 @@ const Write = () => {
     }
   };
 
-  // Cancel publishing in modal
   const handleCancel = () => {
     setIsModalOpen(false);
   };
@@ -87,14 +91,12 @@ const Write = () => {
                   : "light-mode text-gray-900 bg-white/90"
               }`}
             >
-              {/* MacOS style window controls */}
               <div className="absolute top-3 left-3 flex space-x-2">
                 <div className="w-3 h-3 rounded-full bg-[#FF5F57]"></div>
                 <div className="w-3 h-3 rounded-full bg-[#FEBC2E]"></div>
                 <div className="w-3 h-3 rounded-full bg-[#28C840]"></div>
               </div>
 
-              {/* Theme Toggle */}
               <button
                 type="button"
                 onClick={(e) => {
@@ -111,7 +113,6 @@ const Write = () => {
                 )}
               </button>
 
-              {/* Writing Area */}
               <div className="relative z-10 mt-6">
                 <input
                   type="text"
@@ -135,11 +136,23 @@ const Write = () => {
                     className="min-h-[300px] font-serif text-lg leading-[30px] focus:outline-none pt-[2px]"
                   />
                 </div>
+
+                {/* NEW: Tag Input Field */}
+                <input
+                  type="text"
+                  value={tags}
+                  onChange={(e) => setTags(e.target.value)}
+                  placeholder="Tags (comma separated)"
+                  className={`w-full text-sm mt-6 bg-transparent border-b pb-1 focus:outline-none placeholder-gray-400 ${
+                    isDark
+                      ? "border-gray-700 focus:border-gray-500 text-white"
+                      : "border-gray-200 focus:border-gray-400 text-black"
+                  }`}
+                />
               </div>
             </div>
           </div>
 
-          {/* Share Button with gradient */}
           <div className="flex justify-center mt-8">
             <button
               type="submit"
@@ -168,7 +181,6 @@ const Write = () => {
         </form>
       </div>
 
-      {/* Confirmation Modal */}
       <ConfirmationModal
         isOpen={isModalOpen}
         onConfirm={handleConfirm}
