@@ -20,7 +20,7 @@ const BlogForm = () => {
 
     const blogData = { title, tag, content };
 
-    const res = await fetch("http://localhost:6000/api/blogs", {
+    const res = await fetch("http://localhost:4000/api/blogs", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
