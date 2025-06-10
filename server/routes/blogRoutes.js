@@ -72,7 +72,10 @@ router.post('/:id/react', async (req, res) => {
     console.error('Reaction error:', error);
     res.status(500).json({ message: 'Server error', error: error.message });
   }
-  rrouter.get('/:slug', async (req, res) => {
+})
+
+// Get blog by slug
+router.get('/:slug', async (req, res) => {
   try {
     const blog = await Blog.findOne({ slug: req.params.slug });
     if (!blog) return res.status(404).json({ message: "Blog not found" });
@@ -80,9 +83,6 @@ router.post('/:id/react', async (req, res) => {
   } catch (err) {
     res.status(500).json({ message: "Server error", error: err.message });
   }
-});
-
-
 });
 
 export default router;
