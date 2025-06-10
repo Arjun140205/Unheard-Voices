@@ -4,7 +4,6 @@ import { v4 as uuidv4 } from 'uuid';
 
 const router = express.Router();
 
-// List of inappropriate words (you can expand it)
 const BAD_WORDS = ['badword1', 'badword2', 'abuse'];
 
 const containsBadWords = (text) => {
@@ -12,6 +11,7 @@ const containsBadWords = (text) => {
   return BAD_WORDS.some((word) => lowered.includes(word));
 };
 
+// Create a blog post
 router.post('/', async (req, res) => {
   try {
     const { title, content, tags } = req.body;
@@ -28,7 +28,7 @@ router.post('/', async (req, res) => {
       title,
       content,
       tags,
-      authorId: uuidv4(), // assign unique random ID
+      authorId: uuidv4(),
     });
 
     const savedBlog = await newBlog.save();
@@ -38,3 +38,51 @@ router.post('/', async (req, res) => {
     res.status(500).json({ message: 'Server error', error: error.message });
   }
 });
+
+// Get all blogs
+router.get('/', async (req, res) => {
+  try {
+    const blogs = await Blog.find();
+    res.json(blogs);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+});
+
+// React to a blog post
+router.post('/:id/react', async (req, res) => {
+  try {
+    const { reaction } = req.body;
+    const validReactions = ['related', 'thoughtful', 'touched', 'inspired'];
+
+    if (!validReactions.includes(reaction)) {
+      return res.status(400).json({ message: 'Invalid reaction type' });
+    }
+
+    const blog = await Blog.findById(req.params.id);
+    if (!blog) {
+      return res.status(404).json({ message: 'Blog not found' });
+    }
+
+    blog.reactions[reaction] = (blog.reactions[reaction] || 0) + 1;
+
+    await blog.save();
+    res.status(200).json(blog);
+  } catch (error) {
+    console.error('Reaction error:', error);
+    res.status(500).json({ message: 'Server error', error: error.message });
+  }
+  rrouter.get('/:slug', async (req, res) => {
+  try {
+    const blog = await Blog.findOne({ slug: req.params.slug });
+    if (!blog) return res.status(404).json({ message: "Blog not found" });
+    res.json(blog);
+  } catch (err) {
+    res.status(500).json({ message: "Server error", error: err.message });
+  }
+});
+
+
+});
+
+export default router;
