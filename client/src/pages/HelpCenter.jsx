@@ -1,44 +1,76 @@
-import { motion } from "framer-motion";
-import { FaQuestionCircle } from "react-icons/fa";
-import helpImg from "../assets/help-center.svg"; 
+import React from 'react';
+import { Helmet } from 'react-helmet-async';
+import BackgroundImage from '../components/BackgroundImage';
+import Footer from '../components/Footer';
 
-const HelpCenter = () => {
+export default function HelpCenter() {
   return (
-    <div className="max-w-5xl mx-auto px-6 py-12 text-[#292929] font-serif">
-      <motion.div
-        initial={{ opacity: 0, y: 40 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.8 }}
-      >
-        <div className="text-center mb-10">
-          <FaQuestionCircle className="text-5xl mx-auto text-green-600 mb-4" />
-          <h1 className="text-4xl font-bold">Help Center</h1>
-          <p className="text-gray-600 mt-2">
-            Get support, find answers, and understand how to use Unheard Voices better.
-          </p>
-        </div>
+    <div className="min-h-screen flex flex-col">
+      <div className="flex-grow">
+        <BackgroundImage imageUrl="https://images.unsplash.com/photo-1462275646964-a0e3386b89fa?auto=format&fit=crop&q=80">
+          <div className="py-16 px-4">
+            <Helmet>
+              <title>Help Center | Unheard Voices</title>
+              <meta name="description" content="Get help with using Unheard Voices" />
+            </Helmet>
 
-        <img src={helpImg} alt="Help Illustration" className="mx-auto w-60 mb-10" />
+            <div className="max-w-3xl mx-auto space-y-8">
+              <div className="text-center mb-16">
+                <h1 className="text-5xl font-serif text-gray-800 mb-4">Finding Your Voice</h1>
+                <p className="text-gray-600 italic text-lg">"Let your thoughts flow like a gentle stream"</p>
+              </div>
 
-        <section className="space-y-6">
-          <h2 className="text-2xl font-semibold">How do I start writing?</h2>
-          <p>
-            Just visit the "Write" page and begin. No sign-ups. No profiles. Just your words, anonymously shared with the world.
-          </p>
+              <div className="bg-white/40 backdrop-blur-sm p-8 rounded-2xl border border-white/50 shadow-[0_8px_30px_rgb(0,0,0,0.04)]">
+                <h2 className="text-2xl text-gray-700 mb-6 font-serif">Your Journey Begins</h2>
+                <div className="space-y-4 text-gray-600">
+                  <p className="text-lg">Start your journey of self-expression:</p>
+                  <ul className="space-y-3 ml-4">
+                    <li className="flex items-center space-x-3">
+                      <span className="w-1.5 h-1.5 bg-gray-400 rounded-full"></span>
+                      <span>Write from your heart, free from judgment</span>
+                    </li>
+                    <li className="flex items-center space-x-3">
+                      <span className="w-1.5 h-1.5 bg-gray-400 rounded-full"></span>
+                      <span>Share your story in complete anonymity</span>
+                    </li>
+                    <li className="flex items-center space-x-3">
+                      <span className="w-1.5 h-1.5 bg-gray-400 rounded-full"></span>
+                      <span>Find solace in shared experiences</span>
+                    </li>
+                  </ul>
+                </div>
+              </div>
 
-          <h2 className="text-2xl font-semibold">Can I edit or delete my story?</h2>
-          <p>
-            Since we don't store user data or have accounts, deletion and edits are not currently supported. We're exploring secure, anonymous edit links.
-          </p>
+              <div className="grid md:grid-cols-2 gap-6">
+                <div className="bg-white/40 backdrop-blur-sm p-8 rounded-2xl border border-white/50 shadow-[0_8px_30px_rgb(0,0,0,0.04)]">
+                  <h2 className="text-2xl text-gray-700 mb-4 font-serif">Safe Space</h2>
+                  <p className="text-gray-600 leading-relaxed">
+                    Your identity remains protected. Express freely, connect genuinely, 
+                    and find understanding in our community of anonymous writers.
+                  </p>
+                </div>
 
-          <h2 className="text-2xl font-semibold">Still need help?</h2>
-          <p>
-            Contact us at <span className="text-green-700">unheardvoices4u@gmail.com</span>. Our tiny but passionate team will get back to you soon.
-          </p>
-        </section>
-      </motion.div>
+                <div className="bg-white/40 backdrop-blur-sm p-8 rounded-2xl border border-white/50 shadow-[0_8px_30px_rgb(0,0,0,0.04)]">
+                  <h2 className="text-2xl text-gray-700 mb-4 font-serif">Supporting Each Other</h2>
+                  <p className="text-gray-600 leading-relaxed">
+                    Share empathy through meaningful reactions. Let others know their words 
+                    have touched, inspired, or resonated with you.
+                  </p>
+                </div>
+              </div>
+
+              <div className="bg-white/40 backdrop-blur-sm p-8 rounded-2xl border border-white/50 shadow-[0_8px_30px_rgb(0,0,0,0.04)]">
+                <h2 className="text-2xl text-gray-700 mb-4 font-serif">Need Guidance?</h2>
+                <p className="text-gray-600 leading-relaxed">
+                  While your privacy is paramount, we're here to help. Use our anonymous 
+                  feedback system to reach out about any concerns or questions.
+                </p>
+              </div>
+            </div>
+          </div>
+        </BackgroundImage>
+      </div>
+      <Footer />
     </div>
   );
-};
-
-export default HelpCenter;
+}
