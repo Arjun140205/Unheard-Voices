@@ -9,7 +9,7 @@ export default function BlogDetails() {
   useEffect(() => {
     const fetchBlog = async () => {
       try {
-        const res = await fetch(`http://localhost:6000/api/blogs/${slug}`);
+        const res = await fetch(`http://localhost:4000/api/blogs/${slug}`);
         const data = await res.json();
         setBlog(data);
       } catch (err) {
