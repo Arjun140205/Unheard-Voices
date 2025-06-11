@@ -1,7 +1,6 @@
 import React from "react";
 import { Helmet } from "react-helmet-async";
 import BackgroundImage from "../components/BackgroundImage";
-import Footer from "../components/Footer";
 
 export default function CookiePolicy() {
   return (
@@ -102,7 +101,6 @@ export default function CookiePolicy() {
           </div>
         </BackgroundImage>
       </div>
-      <Footer />
     </div>
   );
 }
