@@ -21,9 +21,9 @@ function App() {
     <HelmetProvider>
       <LazyMotion features={domAnimation}>
         <Router>
-          <div className="min-h-screen bg-[#FFFFFF] flex flex-col">
+          <div className="min-h-screen bg-[#FFFFFF] flex flex-col relative">
             <Navbar />
-            <div className="flex-grow pt-16">
+            <main className="flex-1 pt-16">
               <Routes>
                 <Route path="/" element={<Home />} />
                 <Route path="/write" element={<Write />} />
@@ -38,7 +38,7 @@ function App() {
                 <Route path="/cookies" element={<CookiePolicy />} />
                 <Route path ="/BlogDetails" element={<BlogDetails />} />
               </Routes>
-            </div>
+            </main>
             <Footer />
           </div>
         </Router>
