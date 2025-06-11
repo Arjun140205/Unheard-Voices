@@ -1,7 +1,6 @@
 import React from "react";
 import { Helmet } from "react-helmet-async";
 import BackgroundImage from "../components/BackgroundImage";
-import Footer from "../components/Footer";
 
 export default function PrivacyPolicy() {
   return (
@@ -98,7 +97,6 @@ export default function PrivacyPolicy() {
           </div>
         </BackgroundImage>
       </div>
-      <Footer />
     </div>
   );
 }
