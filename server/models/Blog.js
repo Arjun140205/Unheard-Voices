@@ -10,6 +10,11 @@ const blogSchema = new mongoose.Schema({
     type: String,
     default: 'Anonymous'
   },
+  status: {
+    type: String,
+    enum: ['pending', 'approved', 'rejected'],
+    default: 'pending'
+  },
   createdAt: {
     type: Date,
     default: Date.now
