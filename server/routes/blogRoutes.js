@@ -11,6 +11,22 @@ const containsBadWords = (text) => {
   return BAD_WORDS.some((word) => lowered.includes(word));
 };
 
+// Get all approved blogs
+router.get('/', async (req, res) => {
+  try {
+    const blogs = await Blog.find({ status: 'approved' })
+      .sort({ createdAt: -1 })
+      .select('-__v')
+      .lean();
+    
+    // Return an empty array if no blogs are found (this is not an error condition)
+    res.json(blogs || []);
+  } catch (error) {
+    console.error('Error fetching blogs:', error);
+    res.status(500).json({ message: 'Error fetching blogs', error: error.message });
+  }
+});
+
 // Create a blog post
 router.post('/', async (req, res) => {
   try {
@@ -28,6 +44,7 @@ router.post('/', async (req, res) => {
       title,
       content,
       tags,
+      status: 'pending', // Set initial status as pending
       authorId: uuidv4(),
     });
 
@@ -36,16 +53,6 @@ router.post('/', async (req, res) => {
   } catch (error) {
     console.error('Error creating blog:', error);
     res.status(500).json({ message: 'Server error', error: error.message });
-  }
-});
-
-// Get all blogs
-router.get('/', async (req, res) => {
-  try {
-    const blogs = await Blog.find();
-    res.json(blogs);
-  } catch (error) {
-    res.status(500).json({ message: error.message });
   }
 });
 
