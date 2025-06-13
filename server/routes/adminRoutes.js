@@ -5,24 +5,59 @@ import Blog from '../models/Blog.js';
 dotenv.config();
 const router = express.Router();
 
-// Simple admin auth check
+// Middleware to check admin authentication
+const checkAdminAuth = (req, res, next) => {
+  const { adminToken } = req.headers;
+  if (adminToken !== process.env.ADMIN_SECRET) {
+    return res.status(401).json({ error: 'Unauthorized' });
+  }
+  next();
+};
+
+// Admin login
 router.post('/login', (req, res) => {
   const { password } = req.body;
-
   if (password === process.env.ADMIN_SECRET) {
-    return res.status(200).json({ message: 'Authenticated' });
+    res.json({ success: true, token: process.env.ADMIN_SECRET });
+  } else {
+    res.status(401).json({ error: 'Invalid credentials' });
   }
-
-  return res.status(401).json({ message: 'Unauthorized' });
 });
 
-// Get all blogs for admin
-router.get('/blogs', async (req, res) => {
+// Get all blogs (including pending ones)
+router.get('/blogs', checkAdminAuth, async (req, res) => {
   try {
-    const blogs = await Blog.find();
+    const blogs = await Blog.find().sort({ createdAt: -1 });
     res.json(blogs);
   } catch (error) {
-    res.status(500).json({ message: 'Server error', error: error.message });
+    res.status(500).json({ error: error.message });
+  }
+});
+
+// Update blog status (approve/reject)
+router.patch('/blogs/:id/status', checkAdminAuth, async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { status } = req.body;
+    const blog = await Blog.findByIdAndUpdate(
+      id,
+      { status },
+      { new: true }
+    );
+    res.json(blog);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+// Delete blog
+router.delete('/blogs/:id', checkAdminAuth, async (req, res) => {
+  try {
+    const { id } = req.params;
+    await Blog.findByIdAndDelete(id);
+    res.json({ success: true });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
   }
 });
 
