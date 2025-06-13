@@ -3,6 +3,7 @@ import mongoose from 'mongoose';
 import cors from 'cors';
 import dotenv from 'dotenv';
 import blogRoutes from './routes/blogRoutes.js';
+import adminRoutes from './routes/adminRoutes.js';
 
 dotenv.config();
 
@@ -14,6 +15,7 @@ app.use(express.json()); // To parse JSON bodies
 
 // Routes
 app.use('/api/blogs', blogRoutes);
+app.use('/api/admin', adminRoutes);
 
 // MongoDB Connection
 const connectDB = async () => {
