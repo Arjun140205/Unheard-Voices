@@ -90,6 +90,38 @@ router.get('/:slug', async (req, res) => {
   } catch (err) {
     res.status(500).json({ message: "Server error", error: err.message });
   }
+})
+
+// POST /api/blogs/:id/vote
+router.post('/:id/vote', async (req, res) => {
+  const { vote } = req.body;
+  const { id } = req.params;
+
+  if (!['yes', 'no'].includes(vote)) {
+    return res.status(400).json({ error: 'Invalid vote option' });
+  }
+
+  try {
+    const blog = await Blog.findById(id);
+    if (!blog) {
+      return res.status(404).json({ error: 'Blog not found' });
+    }
+
+    blog.poll[vote] += 1;
+    await blog.save();
+
+    res.status(200).json({
+      message: 'Vote recorded',
+      poll: blog.poll
+    });
+  } catch (err) {
+    console.error('Voting error:', err);
+    res.status(500).json({ error: 'Server error while recording vote' });
+  }
 });
+
+
+
+
 
 export default router;
