@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { Helmet } from "react-helmet-async";
 
+
 export default function BlogDetails() {
   const { slug } = useParams();
   const [blog, setBlog] = useState(null);
