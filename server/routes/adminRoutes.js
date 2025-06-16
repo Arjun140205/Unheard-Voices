@@ -61,4 +61,15 @@ router.delete('/blogs/:id', checkAdminAuth, async (req, res) => {
   }
 });
 
+// Flag blog for review
+router.patch('/blogs/:id/unflag', checkAdminAuth, async (req, res) => {
+  try {
+    const { id } = req.params;
+    const blog = await Blog.findByIdAndUpdate(id, { flagged: false }, { new: true });
+    res.json(blog);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
 export default router;
