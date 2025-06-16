@@ -119,7 +119,24 @@ router.post('/:id/vote', async (req, res) => {
     res.status(500).json({ error: 'Server error while recording vote' });
   }
 });
+// Get recommended blogs based on tags
+router.get('/recommend/:slug', async (req, res) => {
+  try {
+    const currentBlog = await Blog.findOne({ slug: req.params.slug });
 
+    if (!currentBlog) return res.status(404).json({ error: 'Blog not found' });
+
+    const recommended = await Blog.find({
+      _id: { $ne: currentBlog._id }, // exclude current blog
+      tags: { $in: currentBlog.tags },
+      status: 'approved'
+    }).limit(6);
+
+    res.json(recommended);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
 
 
 
