@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, Link } from "react-router-dom";
 import { Helmet } from "react-helmet-async";
 
 
@@ -8,6 +8,20 @@ export default function BlogDetails() {
   const [blog, setBlog] = useState(null);
   const [hasVoted, setHasVoted] = useState(false);
   const [voteCounts, setVoteCounts] = useState({ yes: 0, no: 0 });
+  const [recommendations, setRecommendations] = useState([]);
+
+  useEffect(() => {
+    const fetchRecommendations = async () => {
+      try {
+        const res = await fetch(`http://localhost:4000/api/blogs/recommend/${slug}`);
+        const data = await res.json();
+        setRecommendations(data);
+      } catch (err) {
+        console.error("Failed to fetch recommendations", err);
+      }
+    };
+    fetchRecommendations();
+  }, [slug]);
 
   useEffect(() => {
     const fetchBlog = async () => {
@@ -123,6 +137,24 @@ export default function BlogDetails() {
           )}
         </div>
       </div>
+
+      {recommendations.length > 0 && (
+        <div className="mt-10">
+          <h2 className="text-2xl font-bold text-pink-300 mb-4">You might also like...</h2>
+          <div className="flex gap-4 overflow-x-auto pb-2">
+            {recommendations.map((rec) => (
+              <Link
+                key={rec._id}
+                to={`/explore/${rec.slug}`}
+                className="min-w-[250px] bg-white/10 backdrop-blur-md rounded-lg p-4 hover:bg-white/20 transition duration-200 shadow"
+              >
+                <h3 className="text-lg font-semibold text-white">{rec.title}</h3>
+                <p className="text-white/60 text-sm line-clamp-3 mt-2">{rec.content.slice(0, 100)}...</p>
+              </Link>
+            ))}
+          </div>
+        </div>
+      )}
     </div>
   );
 }
