@@ -57,7 +57,8 @@ router.get('/analytics', checkAdminAuth, async (req, res) => {
       flaggedBlogs,
       blogsThisMonth,
       allTags,
-      recentBlogs
+      recentBlogs,
+      reactionStats
     ] = await Promise.all([
       // Total blogs count
       Blog.countDocuments(),
@@ -76,7 +77,20 @@ router.get('/analytics', checkAdminAuth, async (req, res) => {
       // Get recent blogs for daily posts analysis
       Blog.find({
         createdAt: { $gte: subDays(new Date(), 30) }
-      }).select('createdAt -_id')
+      }).select('createdAt -_id'),
+
+      // Get reaction statistics
+      Blog.aggregate([
+        {
+          $group: {
+            _id: null,
+            related: { $sum: '$reactions.related' },
+            thoughtful: { $sum: '$reactions.thoughtful' },
+            touched: { $sum: '$reactions.touched' },
+            inspired: { $sum: '$reactions.inspired' }
+          }
+        }
+      ])
     ]);
 
     // Process tags
@@ -103,12 +117,26 @@ router.get('/analytics', checkAdminAuth, async (req, res) => {
       .map(([date, posts]) => ({ date, posts }))
       .sort((a, b) => new Date(a.date) - new Date(b.date));
 
+    // Get the first (and only) result from reactionStats
+    const reactions = reactionStats[0] || {
+      related: 0,
+      thoughtful: 0,
+      touched: 0,
+      inspired: 0
+    };
+
     res.json({
       totalBlogs,
       flaggedBlogs,
       blogsThisMonth,
       topTags,
-      dailyPosts: dailyPostsArray
+      dailyPosts: dailyPostsArray,
+      reactionStats: {
+        related: reactions.related || 0,
+        thoughtful: reactions.thoughtful || 0,
+        touched: reactions.touched || 0,
+        inspired: reactions.inspired || 0
+      }
     });
   } catch (error) {
     console.error('Analytics error:', error);
