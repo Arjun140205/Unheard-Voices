@@ -14,58 +14,91 @@ const checkAdminAuth = (req, res, next) => {
   next();
 };
 
-// Admin login
-router.post('/login', (req, res) => {
-  const { password } = req.body;
-  if (password === process.env.ADMIN_SECRET) {
-    res.json({ success: true, token: process.env.ADMIN_SECRET });
+// Admin token verification
+router.post('/verify', (req, res) => {
+  const { accessToken } = req.body;
+  if (accessToken === process.env.ADMIN_SECRET) {
+    res.json({ success: true });
   } else {
-    res.status(401).json({ error: 'Invalid credentials' });
+    res.status(401).json({ error: 'Invalid access token' });
   }
 });
 
-// Get all blogs (including pending ones)
+// Get all blogs for admin view
 router.get('/blogs', checkAdminAuth, async (req, res) => {
   try {
-    const blogs = await Blog.find().sort({ createdAt: -1 });
+    const blogs = await Blog.find()
+      .sort({ createdAt: -1 })
+      .select('-__v')
+      .lean();
     res.json(blogs);
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
 });
 
-// Update blog status (approve/reject)
-router.patch('/blogs/:id/status', checkAdminAuth, async (req, res) => {
+// Flag or unflag a blog
+router.patch('/blogs/:id/flag', checkAdminAuth, async (req, res) => {
   try {
     const { id } = req.params;
-    const { status } = req.body;
+    const { flagged } = req.body;
+    
     const blog = await Blog.findByIdAndUpdate(
       id,
-      { status },
+      { 
+        flagged,
+        // When flagging a blog, also set its status to rejected
+        ...(flagged ? { status: 'rejected' } : {})
+      },
       { new: true }
     );
+
+    if (!blog) {
+      return res.status(404).json({ error: 'Blog not found' });
+    }
+
     res.json(blog);
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
 });
 
-// Delete blog
+// Delete a blog
 router.delete('/blogs/:id', checkAdminAuth, async (req, res) => {
   try {
     const { id } = req.params;
-    await Blog.findByIdAndDelete(id);
-    res.json({ success: true });
+    const blog = await Blog.findByIdAndDelete(id);
+    
+    if (!blog) {
+      return res.status(404).json({ error: 'Blog not found' });
+    }
+
+    res.json({ message: 'Blog deleted successfully' });
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
 });
 
-// Flag blog for review
-router.patch('/blogs/:id/unflag', checkAdminAuth, async (req, res) => {
+// Update blog status (only used for special cases now)
+router.patch('/blogs/:id/status', checkAdminAuth, async (req, res) => {
   try {
     const { id } = req.params;
-    const blog = await Blog.findByIdAndUpdate(id, { flagged: false }, { new: true });
+    const { status } = req.body;
+    
+    const blog = await Blog.findByIdAndUpdate(
+      id,
+      { 
+        status,
+        // If rejecting, also flag the blog
+        ...(status === 'rejected' ? { flagged: true } : {})
+      },
+      { new: true }
+    );
+
+    if (!blog) {
+      return res.status(404).json({ error: 'Blog not found' });
+    }
+
     res.json(blog);
   } catch (error) {
     res.status(500).json({ error: error.message });
