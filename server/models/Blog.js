@@ -25,6 +25,10 @@ const blogSchema = new mongoose.Schema({
     unique: true,
     required: true
   },
+  views: { type: Number, default: 0 },
+  uniqueVisitors: { type: Number, default: 0 },
+  avgReadTime: { type: Number, default: 0 }, // in seconds
+  shareCount: { type: Number, default: 0 },
   reactions: {
     related: { type: Number, default: 0 },
     thoughtful: { type: Number, default: 0 },
@@ -32,9 +36,15 @@ const blogSchema = new mongoose.Schema({
     inspired: { type: Number, default: 0 }
   },
   poll: {
-  yes: { type: Number, default: 0 },
-  no: { type: Number, default: 0 }
-}
+    yes: { type: Number, default: 0 },
+    no: { type: Number, default: 0 }
+  },
+  engagement: {
+    commentCount: { type: Number, default: 0 },
+    totalReactions: { type: Number, default: 0 },
+    bounceRate: { type: Number, default: 0 }, // percentage
+    returnVisitors: { type: Number, default: 0 }
+  }
 });
 
 // Generate unique slug before saving
@@ -45,7 +55,5 @@ blogSchema.pre('validate', function (next) {
   }
   next();
 });
-
-
 
 export default mongoose.model('Blog', blogSchema);
