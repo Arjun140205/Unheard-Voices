@@ -1,14 +1,30 @@
 import { useState, useEffect } from 'react';
 import { Navigate, useNavigate } from 'react-router-dom';
-import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, PieChart, Pie, Cell } from 'recharts';
+import { 
+  BarChart, Bar, 
+  XAxis, YAxis, 
+  CartesianGrid, 
+  Tooltip, 
+  Legend, 
+  ResponsiveContainer, 
+  PieChart, Pie, 
+  Cell, 
+  LineChart, 
+  Line,
+  AreaChart,
+  Area,
+  RadialBarChart,
+  RadialBar
+} from 'recharts';
 import { Helmet } from "react-helmet-async";
 import adminBg from '../assets/admin.jpg';
 import { format } from 'date-fns';
 
-// Sophisticated, minimalistic color palette
-const COLORS = ['#9DB4C0', '#5C6B73', '#253237', '#8FA6B2', '#405359'];
-const PRIMARY_COLOR = '#5C6B73';
-const ACCENT_COLOR = '#9DB4C0';
+// Vibrant, sophisticated color palette
+const COLORS = ['#63B3ED', '#4FD1C5', '#F6AD55', '#68D391', '#F687B3'];
+const PRIMARY_COLOR = '#63B3ED';
+const SECONDARY_COLOR = '#4FD1C5';
+const TERTIARY_COLOR = '#F6AD55';
 
 const AdminPortal = () => {
   const [accessToken, setAccessToken] = useState('');
@@ -22,7 +38,12 @@ const AdminPortal = () => {
     flaggedBlogs: 0,
     blogsThisMonth: 0,
     topTags: [],
-    engagementData: [],
+    reactionStats: {
+      related: 0,
+      thoughtful: 0,
+      touched: 0,
+      inspired: 0
+    },
     dailyPosts: []
   });
 
@@ -112,25 +133,6 @@ const AdminPortal = () => {
     navigate('/');
   };
 
-  const deleteBlog = async (blogId) => {
-    if (!window.confirm('Are you sure you want to delete this blog?')) return;
-
-    try {
-      const res = await fetch(`http://localhost:4000/api/admin/blogs/${blogId}`, {
-        method: 'DELETE',
-        headers: { adminToken: accessToken },
-      });
-
-      if (res.ok) {
-        fetchData(accessToken);
-      } else {
-        setError('Failed to delete blog');
-      }
-    } catch (err) {
-      setError('Failed to connect to server');
-    }
-  };
-
   // Login Form
   if (!isAuthenticated) {
     return (
@@ -193,6 +195,36 @@ const AdminPortal = () => {
     );
   }
 
+  // Format date for charts
+  const formatDate = (date) => format(new Date(date), 'MMM d');
+
+  // Calculate total reactions
+  const getTotalReactions = () => {
+    const stats = analytics.reactionStats || {};
+    return Object.values(stats).reduce((sum, val) => sum + (val || 0), 0);
+  };
+
+  // Delete blog handler
+  const handleDeleteBlog = async (blogId) => {
+    if (!window.confirm('Are you sure you want to delete this blog?')) return;
+
+    try {
+      const res = await fetch(`http://localhost:4000/api/admin/blogs/${blogId}`, {
+        method: 'DELETE',
+        headers: { adminToken: accessToken },
+      });
+
+      if (res.ok) {
+        // Refresh blogs and analytics after deletion
+        fetchData(accessToken);
+      } else {
+        setError('Failed to delete blog');
+      }
+    } catch (err) {
+      setError('Failed to connect to server');
+    }
+  };
+
   return (
     <div className="relative min-h-screen bg-gray-50">
       <Helmet>
@@ -234,10 +266,9 @@ const AdminPortal = () => {
             onClick={() => setActiveTab('dashboard')}
             className={`px-4 py-2 font-serif -mb-px ${
               activeTab === 'dashboard'
-                ? 'text-gray-800 border-b-2 border-gray-800'
+                ? 'text-[#63B3ED] border-b-2 border-[#63B3ED]'
                 : 'text-gray-500 hover:text-gray-700'
             } transition-colors duration-200`}
-            style={{ fontFamily: 'EB Garamond' }}
           >
             Dashboard
           </button>
@@ -245,10 +276,9 @@ const AdminPortal = () => {
             onClick={() => setActiveTab('blogs')}
             className={`px-4 py-2 font-serif -mb-px ${
               activeTab === 'blogs'
-                ? 'text-gray-800 border-b-2 border-gray-800'
+                ? 'text-[#63B3ED] border-b-2 border-[#63B3ED]'
                 : 'text-gray-500 hover:text-gray-700'
             } transition-colors duration-200`}
-            style={{ fontFamily: 'EB Garamond' }}
           >
             All Blogs
           </button>
@@ -256,96 +286,199 @@ const AdminPortal = () => {
             onClick={() => setActiveTab('flagged')}
             className={`px-4 py-2 font-serif -mb-px ${
               activeTab === 'flagged'
-                ? 'text-gray-800 border-b-2 border-gray-800'
+                ? 'text-[#63B3ED] border-b-2 border-[#63B3ED]'
                 : 'text-gray-500 hover:text-gray-700'
             } transition-colors duration-200`}
-            style={{ fontFamily: 'EB Garamond' }}
           >
             Flagged Blogs
           </button>
         </div>
 
-        {error && (
-          <div className="mb-6 p-4 text-red-600 border border-red-100 bg-red-50 rounded">
-            {error}
-          </div>
-        )}
-
         {/* Dashboard View */}
         {activeTab === 'dashboard' && (
           <div className="space-y-8">
-            {/* Stats Cards */}
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-              <div className="bg-white p-6 border border-[#E5E9EB]">
-                <h3 className="text-sm font-medium text-[#5C6B73] uppercase tracking-wide font-serif" style={{ fontFamily: 'EB Garamond' }}>Total Blogs</h3>
-                <p className="text-3xl font-bold text-[#253237] mt-2 font-serif" style={{ fontFamily: 'EB Garamond' }}>{analytics.totalBlogs}</p>
-              </div>
-              <div className="bg-white p-6 border border-[#E5E9EB]">
-                <h3 className="text-sm font-medium text-[#5C6B73] uppercase tracking-wide font-serif" style={{ fontFamily: 'EB Garamond' }}>Flagged Content</h3>
-                <p className="text-3xl font-bold text-[#405359] mt-2 font-serif" style={{ fontFamily: 'EB Garamond' }}>{analytics.flaggedBlogs}</p>
-              </div>
-              <div className="bg-white p-6 border border-[#E5E9EB]">
-                <h3 className="text-sm font-medium text-[#5C6B73] uppercase tracking-wide font-serif" style={{ fontFamily: 'EB Garamond' }}>This Month</h3>
-                <p className="text-3xl font-bold text-[#405359] mt-2 font-serif" style={{ fontFamily: 'EB Garamond' }}>{analytics.blogsThisMonth}</p>
+            {/* Stats Overview - Radial Bars */}
+            <div className="bg-white p-6 border border-[#E5E9EB]">
+              <h3 className="text-sm font-medium text-[#5C6B73] uppercase tracking-wide mb-6 font-serif">
+                Overview
+              </h3>
+              <div className="h-80">
+                <ResponsiveContainer width="100%" height="100%">
+                  <RadialBarChart 
+                    cx="50%" 
+                    cy="50%" 
+                    innerRadius="30%" 
+                    outerRadius="100%" 
+                    data={[
+                      {
+                        name: 'Total Posts',
+                        value: analytics.totalBlogs,
+                        fill: COLORS[0]
+                      },
+                      {
+                        name: 'This Month',
+                        value: analytics.blogsThisMonth,
+                        fill: COLORS[1]
+                      },
+                      {
+                        name: 'Reactions',
+                        value: getTotalReactions(),
+                        fill: COLORS[2]
+                      },
+                      {
+                        name: 'Flagged',
+                        value: analytics.flaggedBlogs,
+                        fill: COLORS[3]
+                      }
+                    ]}
+                  >
+                    <RadialBar
+                      minAngle={15}
+                      background
+                      clockWise={true}
+                      dataKey="value"
+                    />
+                    <Legend 
+                      iconSize={10} 
+                      layout="vertical" 
+                      verticalAlign="middle" 
+                      align="right"
+                    />
+                    <Tooltip />
+                  </RadialBarChart>
+                </ResponsiveContainer>
               </div>
             </div>
 
-            {/* Charts */}
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mt-6">
-              {/* Daily Posts Chart */}
+            {/* Two Column Charts */}
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+              {/* Reaction Types - Pie Chart */}
               <div className="bg-white p-6 border border-[#E5E9EB]">
-                <h3 className="text-sm font-medium text-[#5C6B73] uppercase tracking-wide mb-6 font-serif" style={{ fontFamily: 'EB Garamond' }}>Posts per Day</h3>
-                <div className="h-80">
-                  <ResponsiveContainer width="100%" height="100%">
-                    <BarChart data={analytics.dailyPosts}>
-                      <CartesianGrid strokeDasharray="3 3" stroke="#E5E9EB" />
-                      <XAxis dataKey="date" stroke="#5C6B73" />
-                      <YAxis stroke="#5C6B73" />
-                      <Tooltip 
-                        contentStyle={{ 
-                          backgroundColor: '#fff',
-                          border: '1px solid #E5E9EB',
-                          borderRadius: '2px',
-                          boxShadow: 'none'
-                        }}
-                      />
-                      <Bar dataKey="posts" fill="#9DB4C0" />
-                    </BarChart>
-                  </ResponsiveContainer>
-                </div>
-              </div>
-
-              {/* Top Tags Chart */}
-              <div className="bg-white p-6 border border-[#E5E9EB]">
-                <h3 className="text-sm font-medium text-[#5C6B73] uppercase tracking-wide mb-6 font-serif" style={{ fontFamily: 'EB Garamond' }}>Popular Tags</h3>
+                <h3 className="text-sm font-medium text-[#5C6B73] uppercase tracking-wide mb-6 font-serif">
+                  Reaction Distribution
+                </h3>
                 <div className="h-80">
                   <ResponsiveContainer width="100%" height="100%">
                     <PieChart>
                       <Pie
-                        data={analytics.topTags}
-                        dataKey="count"
-                        nameKey="tag"
+                        data={[
+                          { name: 'Related', value: analytics.reactionStats?.related || 0 },
+                          { name: 'Thoughtful', value: analytics.reactionStats?.thoughtful || 0 },
+                          { name: 'Touched', value: analytics.reactionStats?.touched || 0 },
+                          { name: 'Inspired', value: analytics.reactionStats?.inspired || 0 }
+                        ]}
+                        dataKey="value"
+                        nameKey="name"
                         cx="50%"
                         cy="50%"
-                        outerRadius={100}
-                        label
+                        outerRadius={80}
+                        label={({name, percent}) => `${name} ${(percent * 100).toFixed(0)}%`}
                       >
-                        {analytics.topTags.map((entry, index) => (
-                          <Cell key={index} fill={COLORS[index % COLORS.length]} />
+                        {COLORS.map((color, index) => (
+                          <Cell key={`cell-${index}`} fill={color} />
                         ))}
                       </Pie>
-                      <Tooltip 
-                        contentStyle={{ 
-                          backgroundColor: '#fff',
-                          border: '1px solid #E5E9EB',
-                          borderRadius: '2px',
-                          boxShadow: 'none'
-                        }}
-                      />
+                      <Tooltip />
                       <Legend />
                     </PieChart>
                   </ResponsiveContainer>
                 </div>
+              </div>
+
+              {/* Popular Tags - Bar Chart */}
+              <div className="bg-white p-6 border border-[#E5E9EB]">
+                <h3 className="text-sm font-medium text-[#5C6B73] uppercase tracking-wide mb-6 font-serif">
+                  Popular Tags
+                </h3>
+                <div className="h-80">
+                  <ResponsiveContainer width="100%" height="100%">
+                    <BarChart 
+                      data={analytics.topTags} 
+                      layout="vertical"
+                      margin={{ left: 50 }}
+                    >
+                      <CartesianGrid strokeDasharray="3 3" stroke="#E5E9EB" />
+                      <XAxis type="number" stroke="#666" />
+                      <YAxis
+                        dataKey="tag"
+                        type="category"
+                        stroke="#666"
+                        width={100}
+                      />
+                      <Tooltip
+                        contentStyle={{ 
+                          backgroundColor: '#fff',
+                          border: '1px solid #E5E9EB'
+                        }}
+                        formatter={(value) => [value, 'Posts']}
+                      />
+                      <Bar 
+                        dataKey="count" 
+                        fill={TERTIARY_COLOR}
+                      />
+                    </BarChart>
+                  </ResponsiveContainer>
+                </div>
+              </div>
+            </div>
+
+            {/* Content Trend - Area Chart */}
+            <div className="bg-white p-6 border border-[#E5E9EB]">
+              <h3 className="text-sm font-medium text-[#5C6B73] uppercase tracking-wide mb-6 font-serif">
+                Content Trend
+              </h3>
+              <div className="h-80">
+                <ResponsiveContainer width="100%" height="100%">
+                  <AreaChart data={analytics.dailyPosts}>
+                    <defs>
+                      <linearGradient id="colorPosts" x1="0" y1="0" x2="0" y2="1">
+                        <stop offset="5%" stopColor={PRIMARY_COLOR} stopOpacity={0.8}/>
+                        <stop offset="95%" stopColor={PRIMARY_COLOR} stopOpacity={0.1}/>
+                      </linearGradient>
+                    </defs>
+                    <CartesianGrid strokeDasharray="3 3" stroke="#E5E9EB" />
+                    <XAxis 
+                      dataKey="date" 
+                      stroke="#666"
+                      tickFormatter={formatDate}
+                    />
+                    <YAxis stroke="#666" />
+                    <Tooltip
+                      contentStyle={{ 
+                        backgroundColor: '#fff',
+                        border: '1px solid #E5E9EB'
+                      }}
+                      formatter={(value) => [value, 'Posts']}
+                      labelFormatter={(label) => formatDate(label)}
+                    />
+                    <Area 
+                      type="monotone" 
+                      dataKey="posts" 
+                      stroke={PRIMARY_COLOR} 
+                      fill="url(#colorPosts)" 
+                    />
+                  </AreaChart>
+                </ResponsiveContainer>
+              </div>
+            </div>
+
+            {/* Stats Cards */}
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+              <div className="bg-white p-6 border border-[#E5E9EB] rounded-lg">
+                <h3 className="text-sm font-medium text-[#5C6B73] uppercase tracking-wide font-serif">Total Posts</h3>
+                <p className="text-3xl font-bold text-[#253237] mt-2 font-serif">{analytics.totalBlogs}</p>
+              </div>
+              <div className="bg-white p-6 border border-[#E5E9EB] rounded-lg">
+                <h3 className="text-sm font-medium text-[#5C6B73] uppercase tracking-wide font-serif">This Month</h3>
+                <p className="text-3xl font-bold text-[#253237] mt-2 font-serif">{analytics.blogsThisMonth}</p>
+              </div>
+              <div className="bg-white p-6 border border-[#E5E9EB] rounded-lg">
+                <h3 className="text-sm font-medium text-[#5C6B73] uppercase tracking-wide font-serif">Total Reactions</h3>
+                <p className="text-3xl font-bold text-[#253237] mt-2 font-serif">{getTotalReactions()}</p>
+              </div>
+              <div className="bg-white p-6 border border-[#E5E9EB] rounded-lg">
+                <h3 className="text-sm font-medium text-[#5C6B73] uppercase tracking-wide font-serif">Flagged Content</h3>
+                <p className="text-3xl font-bold text-[#253237] mt-2 font-serif">{analytics.flaggedBlogs}</p>
               </div>
             </div>
           </div>
@@ -356,22 +489,18 @@ const AdminPortal = () => {
           <div className="bg-white border border-[#E5E9EB]">
             <div className="overflow-x-auto">
               <table className="min-w-full">
-                <thead className="bg-[#F8FAFC] border-b border-[#E5E9EB]">
+                <thead className="bg-gray-50 border-b border-[#E5E9EB]">
                   <tr>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-[#5C6B73] uppercase tracking-wide font-serif"
-                        style={{ fontFamily: 'EB Garamond' }}>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-[#5C6B73] uppercase tracking-wide font-serif">
                       Title
                     </th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-[#5C6B73] uppercase tracking-wide font-serif"
-                        style={{ fontFamily: 'EB Garamond' }}>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-[#5C6B73] uppercase tracking-wide font-serif">
                       Posted On
                     </th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-[#5C6B73] uppercase tracking-wide font-serif"
-                        style={{ fontFamily: 'EB Garamond' }}>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-[#5C6B73] uppercase tracking-wide font-serif">
                       Status
                     </th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-[#5C6B73] uppercase tracking-wide font-serif"
-                        style={{ fontFamily: 'EB Garamond' }}>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-[#5C6B73] uppercase tracking-wide font-serif">
                       Actions
                     </th>
                   </tr>
@@ -380,31 +509,30 @@ const AdminPortal = () => {
                   {blogs
                     .filter(blog => activeTab === 'flagged' ? blog.flagged : true)
                     .map((blog) => (
-                      <tr key={blog._id} className={blog.flagged ? 'bg-[#F8FAFC]' : 'hover:bg-[#F8FAFC]'}>
+                      <tr key={blog._id} className={blog.flagged ? 'bg-red-50/50' : 'hover:bg-gray-50/50'}>
                         <td className="px-6 py-4">
-                          <div className="text-sm font-medium text-[#253237] font-serif" style={{ fontFamily: 'EB Garamond' }}>
+                          <div className="text-sm font-medium text-[#253237] font-serif">
                             {blog.title}
                           </div>
                         </td>
                         <td className="px-6 py-4">
-                          <div className="text-sm text-[#5C6B73] font-serif" style={{ fontFamily: 'EB Garamond' }}>
+                          <div className="text-sm text-[#5C6B73] font-serif">
                             {format(new Date(blog.createdAt), 'MMM d, yyyy')}
                           </div>
                         </td>
                         <td className="px-6 py-4">
                           <span className={`px-2 inline-flex text-xs leading-5 font-medium rounded-sm font-serif ${
                             blog.flagged
-                              ? 'text-[#405359] bg-[#F8FAFC]'
-                              : 'text-[#405359] bg-[#F8FAFC]'
-                          }`} style={{ fontFamily: 'EB Garamond' }}>
+                              ? 'text-red-600 bg-red-50'
+                              : 'text-green-600 bg-green-50'
+                          }`}>
                             {blog.flagged ? 'Flagged' : 'Active'}
                           </span>
                         </td>
                         <td className="px-6 py-4 text-sm font-medium">
                           <button
-                            onClick={() => deleteBlog(blog._id)}
-                            className="text-[#5C6B73] hover:text-[#253237] mr-4 transition-colors duration-200 font-serif"
-                            style={{ fontFamily: 'EB Garamond' }}
+                            onClick={() => handleDeleteBlog(blog._id)}
+                            className="text-[#5C6B73] hover:text-red-600 mr-4 transition-colors duration-200 font-serif"
                           >
                             Delete
                           </button>
@@ -412,8 +540,7 @@ const AdminPortal = () => {
                             href={`/blog/${blog.slug}`}
                             target="_blank"
                             rel="noopener noreferrer"
-                            className="text-[#5C6B73] hover:text-[#253237] transition-colors duration-200 font-serif"
-                            style={{ fontFamily: 'EB Garamond' }}
+                            className="text-[#5C6B73] hover:text-[#63B3ED] transition-colors duration-200 font-serif"
                           >
                             View
                           </a>
