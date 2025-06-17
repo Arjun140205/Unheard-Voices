@@ -28,7 +28,9 @@ export default function Explore() {
       try {
         setLoading(true);
         const res = await fetch("http://localhost:4000/api/blogs");
+        console.log('API Response:', res);
         const data = await res.json();
+        console.log('Fetched blogs:', data);
         
         if (!res.ok) {
           throw new Error(data.message || 'Failed to fetch blogs');
@@ -37,6 +39,7 @@ export default function Explore() {
         const sorted = [...data].sort(
           (a, b) => new Date(b.createdAt) - new Date(a.createdAt)
         );
+        console.log('Sorted blogs:', sorted);
         setBlogs(sorted);
         setError(null);
       } catch (err) {
