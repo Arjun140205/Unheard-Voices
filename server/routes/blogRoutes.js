@@ -11,16 +11,45 @@ const containsBadWords = (text) => {
   return BAD_WORDS.some((word) => lowered.includes(word));
 };
 
-// Get all approved blogs
+// Get all non-flagged blogs
 router.get('/', async (req, res) => {
   try {
-    const blogs = await Blog.find({ status: 'approved' })
-      .sort({ createdAt: -1 })
-      .select('-__v')
-      .lean();
+    console.log('Fetching blogs...');
     
-    // Return an empty array if no blogs are found (this is not an error condition)
-    res.json(blogs || []);
+    // First, let's get ALL blogs to see what's in the database
+    const allBlogs = await Blog.find().lean();
+    console.log('All blogs in database:', JSON.stringify(allBlogs, null, 2));
+
+    // Now get blogs that should be visible
+    const visibleBlogs = await Blog.find({
+      $or: [
+        // Either approved and not flagged
+        {
+          $and: [
+            { status: 'approved' },
+            { $or: [{ flagged: false }, { flagged: { $exists: false } }] }
+          ]
+        },
+        // Or just created (no status check)
+        {
+          createdAt: { $gt: new Date(Date.now() - 24 * 60 * 60 * 1000) } // Last 24 hours
+        }
+      ]
+    })
+    .sort({ createdAt: -1 })
+    .select('-__v')
+    .lean();
+    
+    console.log('Visible blogs:', JSON.stringify(visibleBlogs, null, 2));
+    
+    if (visibleBlogs.length === 0 && allBlogs.length > 0) {
+      console.log('Warning: Found blogs in database but none are visible.');
+      console.log('Blog status counts:', await Blog.aggregate([
+        { $group: { _id: '$status', count: { $sum: 1 } } }
+      ]));
+    }
+    
+    res.json(visibleBlogs || []);
   } catch (error) {
     console.error('Error fetching blogs:', error);
     res.status(500).json({ message: 'Error fetching blogs', error: error.message });
@@ -40,15 +69,31 @@ router.post('/', async (req, res) => {
       return res.status(403).json({ message: 'Inappropriate content detected. Please edit and try again.' });
     }
 
+    const uniqueId = uuidv4().slice(0, 6);
+    const slug = title.toLowerCase()
+      .replace(/[^a-z0-9]+/g, '-')
+      .replace(/(^-|-$)+/g, '') + '-' + uniqueId;
+
     const newBlog = new Blog({
       title,
       content,
-      tags,
-      status: 'pending', // Set initial status as pending
+      tags: tags || [],
+      status: 'approved',
+      flagged: false,
       authorId: uuidv4(),
+      slug,
+      createdAt: new Date(),
+      poll: { yes: 0, no: 0 },
+      reactions: {
+        related: 0,
+        thoughtful: 0,
+        touched: 0,
+        inspired: 0
+      }
     });
 
     const savedBlog = await newBlog.save();
+    console.log('New blog saved:', savedBlog);
     res.status(201).json({ message: 'Blog posted anonymously', blog: savedBlog });
   } catch (error) {
     console.error('Error creating blog:', error);
@@ -119,22 +164,34 @@ router.post('/:id/vote', async (req, res) => {
     res.status(500).json({ error: 'Server error while recording vote' });
   }
 });
-// Get recommended blogs based on tags
+// Get blog recommendations based on slug
 router.get('/recommend/:slug', async (req, res) => {
   try {
-    const currentBlog = await Blog.findOne({ slug: req.params.slug });
+    // Find the current blog
+    const currentBlog = await Blog.findOne({ 
+      slug: req.params.slug, 
+      status: 'approved' 
+    }).select('tags');
 
-    if (!currentBlog) return res.status(404).json({ error: 'Blog not found' });
+    if (!currentBlog) {
+      return res.status(404).json({ message: 'Blog not found' });
+    }
 
-    const recommended = await Blog.find({
-      _id: { $ne: currentBlog._id }, // exclude current blog
-      tags: { $in: currentBlog.tags },
-      status: 'approved'
-    }).limit(6);
+    // Find similar blogs based on tags
+    const recommendations = await Blog.find({
+      status: 'approved',
+      slug: { $ne: req.params.slug }, // Exclude current blog
+      tags: { $in: currentBlog.tags } // Find blogs with matching tags
+    })
+    .select('title content slug createdAt') // Select only needed fields
+    .sort({ createdAt: -1 }) // Sort by newest first
+    .limit(4) // Limit to 4 recommendations
+    .lean();
 
-    res.json(recommended);
-  } catch (err) {
-    res.status(500).json({ error: err.message });
+    res.json(recommendations);
+  } catch (error) {
+    console.error('Error fetching recommendations:', error);
+    res.status(500).json({ message: 'Error fetching recommendations', error: error.message });
   }
 });
 
