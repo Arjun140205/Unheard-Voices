@@ -32,10 +32,17 @@ const Navbar = () => {
               </Link>
               <Link 
                 to="/about" 
-                className="pl-6 text-[#2c2c2c]/80 text-[15px] font-medium tracking-wide"
+                className="px-6 text-[#2c2c2c]/80 text-[15px] font-medium tracking-wide"
                 style={{ fontFamily: 'EB Garamond' }}
               >
                 About
+              </Link>
+              <Link 
+                to="/admin-portal" 
+                className="pl-6 text-[#2c2c2c]/50 text-[15px] font-medium tracking-wide hover:text-[#2c2c2c]/80 transition-colors"
+                style={{ fontFamily: 'EB Garamond' }}
+              >
+                For Admins
               </Link>
             </div>
           </div>
