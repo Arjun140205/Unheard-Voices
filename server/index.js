@@ -13,6 +13,12 @@ const app = express();
 app.use(cors());
 app.use(express.json()); // To parse JSON bodies
 
+// Debug middleware
+app.use((req, res, next) => {
+  console.log(`${req.method} ${req.path}`);
+  next();
+});
+
 // Routes
 app.use('/api/blogs', blogRoutes);
 app.use('/api/admin', adminRoutes);
