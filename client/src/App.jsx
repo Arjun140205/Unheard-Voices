@@ -13,6 +13,7 @@ import CommunityGuidelines from "./pages/CommunityGuidelines";
 import PrivacyPolicy from "./pages/PrivacyPolicy";
 import TermsOfService from "./pages/TermsOfService";
 import CookiePolicy from "./pages/CookiePolicy";
+import AdminPortal from "./pages/AdminPortal";
 import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
 
@@ -36,7 +37,7 @@ function App() {
                 <Route path="/privacy" element={<PrivacyPolicy />} />
                 <Route path="/terms" element={<TermsOfService />} />
                 <Route path="/cookies" element={<CookiePolicy />} />
-                <Route path ="/BlogDetails" element={<BlogDetails />} />
+                <Route path="/admin-portal" element={<AdminPortal />} />
               </Routes>
             </main>
             <Footer />
