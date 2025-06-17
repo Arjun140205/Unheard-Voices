@@ -1,7 +1,14 @@
 import { useState, useEffect } from 'react';
 import { Navigate, useNavigate } from 'react-router-dom';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, PieChart, Pie, Cell } from 'recharts';
+import { Helmet } from "react-helmet-async";
+import adminBg from '../assets/admin.jpg';
 import { format } from 'date-fns';
+
+// Sophisticated, minimalistic color palette
+const COLORS = ['#9DB4C0', '#5C6B73', '#253237', '#8FA6B2', '#405359'];
+const PRIMARY_COLOR = '#5C6B73';
+const ACCENT_COLOR = '#9DB4C0';
 
 const AdminPortal = () => {
   const [accessToken, setAccessToken] = useState('');
@@ -124,144 +131,193 @@ const AdminPortal = () => {
     }
   };
 
-  const COLORS = ['#0088FE', '#00C49F', '#FFBB28', '#FF8042', '#8884d8'];
-
   // Login Form
   if (!isAuthenticated) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-indigo-900 to-purple-900 flex items-center justify-center px-4">
-        <div className="max-w-md w-full bg-white rounded-xl shadow-2xl p-8">
-          <h2 className="text-3xl font-bold text-center text-gray-800 mb-8">Admin Portal</h2>
-          {error && (
-            <div className="mb-4 p-3 bg-red-100 text-red-700 rounded-md text-sm">
-              {error}
-            </div>
-          )}
-          <form onSubmit={handleLogin} className="space-y-6">
-            <div>
-              <label className="block text-gray-700 text-sm font-medium mb-2">
-                Access Token
-              </label>
-              <input
-                type="password"
-                value={accessToken}
-                onChange={(e) => setAccessToken(e.target.value)}
-                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500"
-                required
-              />
-            </div>
-            <button
-              type="submit"
-              disabled={loading}
-              className="w-full bg-indigo-600 text-white py-2 px-4 rounded-md hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 disabled:opacity-50 transition-colors"
-            >
-              {loading ? 'Verifying...' : 'Access Dashboard'}
-            </button>
-          </form>
+      <div className="relative min-h-screen bg-gray-50">
+        <Helmet>
+          <title>Admin Portal - Unheard Voices</title>
+        </Helmet>
+        
+        {/* Background Image */}
+        <div 
+          className="absolute inset-0 bg-cover bg-center bg-no-repeat"
+          style={{ 
+            backgroundImage: `url(${adminBg})`,
+            opacity: 0.1
+          }}
+        />
+
+        <div className="relative z-10 min-h-screen flex items-center justify-center px-4">
+          <div className="max-w-md w-full bg-white p-8 border border-gray-100">
+            <h2 className="text-3xl font-serif text-gray-800 mb-8 text-center" style={{ fontFamily: 'EB Garamond' }}>
+              Admin Portal
+            </h2>
+            
+            {error && (
+              <div className="mb-6 p-3 text-red-600 border border-red-100 bg-red-50 rounded text-sm">
+                {error}
+              </div>
+            )}
+            
+            <form onSubmit={handleLogin} className="space-y-6">
+              <div>
+                <label className="block text-gray-600 text-sm font-medium mb-2 font-serif">
+                  Access Token
+                </label>
+                <input
+                  type="password"
+                  value={accessToken}
+                  onChange={(e) => setAccessToken(e.target.value)}
+                  className="w-full px-4 py-2 border border-gray-200 rounded
+                           text-gray-800 placeholder-gray-400 focus:outline-none focus:ring-1 focus:ring-gray-400
+                           focus:border-gray-400 transition-all duration-200"
+                  required
+                />
+              </div>
+              <button
+                type="submit"
+                disabled={loading}
+                className="w-full bg-gray-700 hover:bg-gray-800 text-white py-2 px-4 rounded
+                         focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2 
+                         disabled:opacity-50 transition-colors duration-200
+                         font-serif text-base"
+                style={{ fontFamily: 'EB Garamond' }}
+              >
+                {loading ? 'Verifying...' : 'Access Dashboard'}
+              </button>
+            </form>
+          </div>
         </div>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="relative min-h-screen bg-gray-50">
+      <Helmet>
+        <title>Admin Dashboard - Unheard Voices</title>
+      </Helmet>
+
+      {/* Background Image */}
+      <div 
+        className="fixed inset-0 bg-cover bg-center bg-no-repeat"
+        style={{ 
+          backgroundImage: `url(${adminBg})`,
+          opacity: 0.1
+        }}
+      />
+
       {/* Header */}
-      <div className="bg-white shadow">
+      <div className="relative z-10 bg-white border-b border-gray-100">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-between items-center py-6">
-            <h1 className="text-3xl font-bold text-gray-900">Admin Dashboard</h1>
+          <div className="flex justify-between items-center py-5">
+            <h1 className="text-2xl font-serif text-gray-800" style={{ fontFamily: 'EB Garamond' }}>
+              Admin Dashboard
+            </h1>
             <button
               onClick={handleLogout}
-              className="px-4 py-2 bg-red-600 text-white rounded-md hover:bg-red-700 transition-colors"
+              className="px-4 py-2 text-gray-600 hover:text-gray-800 font-serif transition-colors duration-200"
+              style={{ fontFamily: 'EB Garamond' }}
             >
-              Logout
+              Sign Out
             </button>
           </div>
         </div>
       </div>
 
       {/* Main Content */}
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+      <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {/* Tabs */}
-        <div className="flex space-x-4 mb-8">
+        <div className="flex space-x-6 mb-8 border-b border-gray-100">
           <button
             onClick={() => setActiveTab('dashboard')}
-            className={`px-4 py-2 rounded-md ${
+            className={`px-4 py-2 font-serif -mb-px ${
               activeTab === 'dashboard'
-                ? 'bg-indigo-600 text-white'
-                : 'bg-white text-gray-700 hover:bg-gray-50'
-            } transition-colors`}
+                ? 'text-gray-800 border-b-2 border-gray-800'
+                : 'text-gray-500 hover:text-gray-700'
+            } transition-colors duration-200`}
+            style={{ fontFamily: 'EB Garamond' }}
           >
             Dashboard
           </button>
           <button
             onClick={() => setActiveTab('blogs')}
-            className={`px-4 py-2 rounded-md ${
+            className={`px-4 py-2 font-serif -mb-px ${
               activeTab === 'blogs'
-                ? 'bg-indigo-600 text-white'
-                : 'bg-white text-gray-700 hover:bg-gray-50'
-            } transition-colors`}
+                ? 'text-gray-800 border-b-2 border-gray-800'
+                : 'text-gray-500 hover:text-gray-700'
+            } transition-colors duration-200`}
+            style={{ fontFamily: 'EB Garamond' }}
           >
             All Blogs
           </button>
           <button
             onClick={() => setActiveTab('flagged')}
-            className={`px-4 py-2 rounded-md ${
+            className={`px-4 py-2 font-serif -mb-px ${
               activeTab === 'flagged'
-                ? 'bg-indigo-600 text-white'
-                : 'bg-white text-gray-700 hover:bg-gray-50'
-            } transition-colors`}
+                ? 'text-gray-800 border-b-2 border-gray-800'
+                : 'text-gray-500 hover:text-gray-700'
+            } transition-colors duration-200`}
+            style={{ fontFamily: 'EB Garamond' }}
           >
             Flagged Blogs
           </button>
         </div>
 
         {error && (
-          <div className="mb-6 p-4 bg-red-100 text-red-700 rounded-lg">
+          <div className="mb-6 p-4 text-red-600 border border-red-100 bg-red-50 rounded">
             {error}
           </div>
         )}
 
         {/* Dashboard View */}
         {activeTab === 'dashboard' && (
-          <div className="space-y-6">
+          <div className="space-y-8">
             {/* Stats Cards */}
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-              <div className="bg-white p-6 rounded-lg shadow">
-                <h3 className="text-lg font-medium text-gray-900">Total Blogs</h3>
-                <p className="text-3xl font-bold text-indigo-600 mt-2">{analytics.totalBlogs}</p>
+              <div className="bg-white p-6 border border-[#E5E9EB]">
+                <h3 className="text-sm font-medium text-[#5C6B73] uppercase tracking-wide font-serif" style={{ fontFamily: 'EB Garamond' }}>Total Blogs</h3>
+                <p className="text-3xl font-bold text-[#253237] mt-2 font-serif" style={{ fontFamily: 'EB Garamond' }}>{analytics.totalBlogs}</p>
               </div>
-              <div className="bg-white p-6 rounded-lg shadow">
-                <h3 className="text-lg font-medium text-gray-900">Flagged Content</h3>
-                <p className="text-3xl font-bold text-red-600 mt-2">{analytics.flaggedBlogs}</p>
+              <div className="bg-white p-6 border border-[#E5E9EB]">
+                <h3 className="text-sm font-medium text-[#5C6B73] uppercase tracking-wide font-serif" style={{ fontFamily: 'EB Garamond' }}>Flagged Content</h3>
+                <p className="text-3xl font-bold text-[#405359] mt-2 font-serif" style={{ fontFamily: 'EB Garamond' }}>{analytics.flaggedBlogs}</p>
               </div>
-              <div className="bg-white p-6 rounded-lg shadow">
-                <h3 className="text-lg font-medium text-gray-900">This Month</h3>
-                <p className="text-3xl font-bold text-green-600 mt-2">{analytics.blogsThisMonth}</p>
+              <div className="bg-white p-6 border border-[#E5E9EB]">
+                <h3 className="text-sm font-medium text-[#5C6B73] uppercase tracking-wide font-serif" style={{ fontFamily: 'EB Garamond' }}>This Month</h3>
+                <p className="text-3xl font-bold text-[#405359] mt-2 font-serif" style={{ fontFamily: 'EB Garamond' }}>{analytics.blogsThisMonth}</p>
               </div>
             </div>
 
             {/* Charts */}
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mt-6">
               {/* Daily Posts Chart */}
-              <div className="bg-white p-6 rounded-lg shadow">
-                <h3 className="text-lg font-medium text-gray-900 mb-4">Posts per Day</h3>
+              <div className="bg-white p-6 border border-[#E5E9EB]">
+                <h3 className="text-sm font-medium text-[#5C6B73] uppercase tracking-wide mb-6 font-serif" style={{ fontFamily: 'EB Garamond' }}>Posts per Day</h3>
                 <div className="h-80">
                   <ResponsiveContainer width="100%" height="100%">
                     <BarChart data={analytics.dailyPosts}>
-                      <CartesianGrid strokeDasharray="3 3" />
-                      <XAxis dataKey="date" />
-                      <YAxis />
-                      <Tooltip />
-                      <Bar dataKey="posts" fill="#8884d8" />
+                      <CartesianGrid strokeDasharray="3 3" stroke="#E5E9EB" />
+                      <XAxis dataKey="date" stroke="#5C6B73" />
+                      <YAxis stroke="#5C6B73" />
+                      <Tooltip 
+                        contentStyle={{ 
+                          backgroundColor: '#fff',
+                          border: '1px solid #E5E9EB',
+                          borderRadius: '2px',
+                          boxShadow: 'none'
+                        }}
+                      />
+                      <Bar dataKey="posts" fill="#9DB4C0" />
                     </BarChart>
                   </ResponsiveContainer>
                 </div>
               </div>
 
               {/* Top Tags Chart */}
-              <div className="bg-white p-6 rounded-lg shadow">
-                <h3 className="text-lg font-medium text-gray-900 mb-4">Popular Tags</h3>
+              <div className="bg-white p-6 border border-[#E5E9EB]">
+                <h3 className="text-sm font-medium text-[#5C6B73] uppercase tracking-wide mb-6 font-serif" style={{ fontFamily: 'EB Garamond' }}>Popular Tags</h3>
                 <div className="h-80">
                   <ResponsiveContainer width="100%" height="100%">
                     <PieChart>
@@ -278,7 +334,14 @@ const AdminPortal = () => {
                           <Cell key={index} fill={COLORS[index % COLORS.length]} />
                         ))}
                       </Pie>
-                      <Tooltip />
+                      <Tooltip 
+                        contentStyle={{ 
+                          backgroundColor: '#fff',
+                          border: '1px solid #E5E9EB',
+                          borderRadius: '2px',
+                          boxShadow: 'none'
+                        }}
+                      />
                       <Legend />
                     </PieChart>
                   </ResponsiveContainer>
@@ -290,53 +353,58 @@ const AdminPortal = () => {
 
         {/* Blogs Table View */}
         {(activeTab === 'blogs' || activeTab === 'flagged') && (
-          <div className="bg-white shadow rounded-lg overflow-hidden">
+          <div className="bg-white border border-[#E5E9EB]">
             <div className="overflow-x-auto">
-              <table className="min-w-full divide-y divide-gray-200">
-                <thead className="bg-gray-50">
+              <table className="min-w-full">
+                <thead className="bg-[#F8FAFC] border-b border-[#E5E9EB]">
                   <tr>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    <th className="px-6 py-3 text-left text-xs font-medium text-[#5C6B73] uppercase tracking-wide font-serif"
+                        style={{ fontFamily: 'EB Garamond' }}>
                       Title
                     </th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    <th className="px-6 py-3 text-left text-xs font-medium text-[#5C6B73] uppercase tracking-wide font-serif"
+                        style={{ fontFamily: 'EB Garamond' }}>
                       Posted On
                     </th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    <th className="px-6 py-3 text-left text-xs font-medium text-[#5C6B73] uppercase tracking-wide font-serif"
+                        style={{ fontFamily: 'EB Garamond' }}>
                       Status
                     </th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    <th className="px-6 py-3 text-left text-xs font-medium text-[#5C6B73] uppercase tracking-wide font-serif"
+                        style={{ fontFamily: 'EB Garamond' }}>
                       Actions
                     </th>
                   </tr>
                 </thead>
-                <tbody className="bg-white divide-y divide-gray-200">
+                <tbody className="divide-y divide-[#E5E9EB]">
                   {blogs
                     .filter(blog => activeTab === 'flagged' ? blog.flagged : true)
                     .map((blog) => (
-                      <tr key={blog._id} className={blog.flagged ? 'bg-red-50' : ''}>
-                        <td className="px-6 py-4 whitespace-nowrap">
-                          <div className="text-sm font-medium text-gray-900">
+                      <tr key={blog._id} className={blog.flagged ? 'bg-[#F8FAFC]' : 'hover:bg-[#F8FAFC]'}>
+                        <td className="px-6 py-4">
+                          <div className="text-sm font-medium text-[#253237] font-serif" style={{ fontFamily: 'EB Garamond' }}>
                             {blog.title}
                           </div>
                         </td>
-                        <td className="px-6 py-4 whitespace-nowrap">
-                          <div className="text-sm text-gray-500">
+                        <td className="px-6 py-4">
+                          <div className="text-sm text-[#5C6B73] font-serif" style={{ fontFamily: 'EB Garamond' }}>
                             {format(new Date(blog.createdAt), 'MMM d, yyyy')}
                           </div>
                         </td>
-                        <td className="px-6 py-4 whitespace-nowrap">
-                          <span className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${
+                        <td className="px-6 py-4">
+                          <span className={`px-2 inline-flex text-xs leading-5 font-medium rounded-sm font-serif ${
                             blog.flagged
-                              ? 'bg-red-100 text-red-800'
-                              : 'bg-green-100 text-green-800'
-                          }`}>
+                              ? 'text-[#405359] bg-[#F8FAFC]'
+                              : 'text-[#405359] bg-[#F8FAFC]'
+                          }`} style={{ fontFamily: 'EB Garamond' }}>
                             {blog.flagged ? 'Flagged' : 'Active'}
                           </span>
                         </td>
-                        <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
+                        <td className="px-6 py-4 text-sm font-medium">
                           <button
                             onClick={() => deleteBlog(blog._id)}
-                            className="text-red-600 hover:text-red-900 mr-4"
+                            className="text-[#5C6B73] hover:text-[#253237] mr-4 transition-colors duration-200 font-serif"
+                            style={{ fontFamily: 'EB Garamond' }}
                           >
                             Delete
                           </button>
@@ -344,7 +412,8 @@ const AdminPortal = () => {
                             href={`/blog/${blog.slug}`}
                             target="_blank"
                             rel="noopener noreferrer"
-                            className="text-indigo-600 hover:text-indigo-900"
+                            className="text-[#5C6B73] hover:text-[#253237] transition-colors duration-200 font-serif"
+                            style={{ fontFamily: 'EB Garamond' }}
                           >
                             View
                           </a>
