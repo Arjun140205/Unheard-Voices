@@ -394,16 +394,19 @@ const AdminPortal = () => {
                   <ResponsiveContainer width="100%" height="100%">
                     <BarChart 
                       data={analytics.topTags} 
-                      layout="vertical"
-                      margin={{ left: 50 }}
+                      margin={{ left: 20, right: 20, bottom: 40 }}
                     >
-                      <CartesianGrid strokeDasharray="3 3" stroke="#E5E9EB" />
-                      <XAxis type="number" stroke="#666" />
-                      <YAxis
-                        dataKey="tag"
-                        type="category"
+                      <CartesianGrid strokeDasharray="3 3" stroke="#E5E9EB" vertical={false} />
+                      <XAxis 
+                        dataKey="tag" 
                         stroke="#666"
-                        width={100}
+                        angle={-45}
+                        textAnchor="end"
+                        height={60}
+                        interval={0}
+                      />
+                      <YAxis
+                        stroke="#666"
                       />
                       <Tooltip
                         contentStyle={{ 
@@ -415,6 +418,8 @@ const AdminPortal = () => {
                       <Bar 
                         dataKey="count" 
                         fill={TERTIARY_COLOR}
+                        radius={[4, 4, 0, 0]}
+                        maxBarSize={50}
                       />
                     </BarChart>
                   </ResponsiveContainer>
