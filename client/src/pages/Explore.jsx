@@ -1,7 +1,9 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { Helmet } from "react-helmet-async";
+import { useInView } from 'react-intersection-observer';
 import exploreBg from '../assets/bg.jpg'; // Using existing bg.jpg as it fits the theme
+import LazyImage from "../components/LazyImage";
 
 const BackgroundContainer = ({ children }) => (
   <div className="relative min-h-screen">
@@ -21,36 +23,46 @@ const BackgroundContainer = ({ children }) => (
 export default function Explore() {
   const [blogs, setBlogs] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
+  const [page, setPage] = useState(1);
+  const [hasMore, setHasMore] = useState(true);
+  
+  const { ref: loadMoreRef, inView: loadMoreInView } = useInView({
+    threshold: 0.5,
+    delay: 100
+  });
+
+  const fetchBlogs = async (pageNum) => {
+    try {
+      const res = await fetch(`http://localhost:4000/api/blogs?page=${pageNum}&limit=10`);
+      const data = await res.json();
+      
+      if (pageNum === 1) {
+        setBlogs(data);
+      } else {
+        setBlogs(prev => [...prev, ...data]);
+      }
+      
+      setHasMore(data.length === 10);
+      setLoading(false);
+    } catch (err) {
+      console.error("Failed to load blogs", err);
+      setLoading(false);
+    }
+  };
 
   useEffect(() => {
-    const fetchBlogs = async () => {
-      try {
-        setLoading(true);
-        const res = await fetch("http://localhost:4000/api/blogs");
-        console.log('API Response:', res);
-        const data = await res.json();
-        console.log('Fetched blogs:', data);
-        
-        if (!res.ok) {
-          throw new Error(data.message || 'Failed to fetch blogs');
-        }
-        
-        const sorted = [...data].sort(
-          (a, b) => new Date(b.createdAt) - new Date(a.createdAt)
-        );
-        console.log('Sorted blogs:', sorted);
-        setBlogs(sorted);
-        setError(null);
-      } catch (err) {
-        console.error("Failed to fetch blogs", err);
-        setError("No approved stories available yet. Check back soon!");
-      } finally {
-        setLoading(false);
-      }
-    };
-    fetchBlogs();
+    fetchBlogs(1);
   }, []);
+
+  useEffect(() => {
+    if (loadMoreInView && hasMore && !loading) {
+      setPage(prev => {
+        const nextPage = prev + 1;
+        fetchBlogs(nextPage);
+        return nextPage;
+      });
+    }
+  }, [loadMoreInView, hasMore, loading]);
 
   const handleCopy = (html) => {
     const tempElement = document.createElement("div");
@@ -61,40 +73,6 @@ export default function Explore() {
       alert("Content copied to clipboard!");
     });
   };
-
-  if (loading) {
-    return (
-      <BackgroundContainer>
-        <div className="min-h-screen py-12 px-4 sm:px-6 lg:px-8">
-          <div className="max-w-7xl mx-auto">
-            <div className="flex flex-col items-center justify-center min-h-[60vh]">
-              <div className="animate-pulse space-y-4 text-center">
-                <div className="h-8 w-48 bg-gray-200 rounded mx-auto"></div>
-                <div className="h-4 w-32 bg-gray-200 rounded mx-auto"></div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </BackgroundContainer>
-    );
-  }
-
-  if (error) {
-    return (
-      <BackgroundContainer>
-        <div className="min-h-screen py-12 px-4 sm:px-6 lg:px-8">
-          <div className="max-w-7xl mx-auto">
-            <div className="flex flex-col items-center justify-center min-h-[60vh]">
-              <p className="text-xl text-gray-600 italic">{error}</p>
-              <Link to="/write" className="mt-4 text-blue-600 hover:text-blue-800 font-medium">
-                Share your story →
-              </Link>
-            </div>
-          </div>
-        </div>
-      </BackgroundContainer>
-    );
-  }
 
   return (
     <BackgroundContainer>
@@ -193,6 +171,30 @@ export default function Explore() {
                   </div>
                 </div>
               ))}
+            </div>
+          )}
+
+          {loading && (
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mt-8">
+              {[1, 2, 3].map((n) => (
+                <div key={n} className="animate-pulse">
+                  <div className="bg-gray-200 h-48 rounded-t-lg"></div>
+                  <div className="p-6 bg-white rounded-b-lg">
+                    <div className="h-6 bg-gray-200 rounded w-3/4 mb-4"></div>
+                    <div className="h-4 bg-gray-200 rounded w-full mb-2"></div>
+                    <div className="h-4 bg-gray-200 rounded w-2/3"></div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          )}
+
+          {hasMore && (
+            <div
+              ref={loadMoreRef}
+              className="mt-8 text-center"
+            >
+              <div className="animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-blue-500 mx-auto"></div>
             </div>
           )}
         </div>
