@@ -15,7 +15,7 @@ const About = () => {
 
       <section className="space-y-10 text-gray-800 text-lg leading-relaxed">
         <p>
-          Unheard Voices isn’t just a platform — it’s a soft place to land.
+          Unheard Voices isn’t just a platform, it’s a soft place to land.
         </p>
 
         <p>
