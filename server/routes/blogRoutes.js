@@ -1,6 +1,7 @@
 import express from 'express';
 import Blog from '../models/Blog.js';
 import { v4 as uuidv4 } from 'uuid';
+import { blogSubmissionLimiter, blogFlagLimiter, apiLimiter } from '../middleware/rateLimiter.js';
 
 const router = express.Router();
 
@@ -10,6 +11,9 @@ const containsBadWords = (text) => {
   const lowered = text.toLowerCase();
   return BAD_WORDS.some((word) => lowered.includes(word));
 };
+
+// Apply API rate limiter to all routes
+router.use(apiLimiter);
 
 // Get all non-flagged blogs
 router.get('/', async (req, res) => {
@@ -57,7 +61,7 @@ router.get('/', async (req, res) => {
 });
 
 // Create a blog post
-router.post('/', async (req, res) => {
+router.post('/', blogSubmissionLimiter, async (req, res) => {
   try {
     const { title, content, tags } = req.body;
 
@@ -195,7 +199,23 @@ router.get('/recommend/:slug', async (req, res) => {
   }
 });
 
+// Flag a blog post - apply blog flag rate limiter
+router.post('/:id/flag', blogFlagLimiter, async (req, res) => {
+  try {
+    const blog = await Blog.findById(req.params.id);
+    if (!blog) {
+      return res.status(404).json({ message: 'Blog not found' });
+    }
 
+    // Toggle the flagged status
+    blog.flagged = !blog.flagged;
 
+    await blog.save();
+    res.status(200).json({ message: 'Blog flagged status updated', blog });
+  } catch (error) {
+    console.error('Error flagging blog:', error);
+    res.status(500).json({ message: 'Server error', error: error.message });
+  }
+});
 
 export default router;
