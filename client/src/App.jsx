@@ -5,6 +5,7 @@ import { Suspense, lazy } from "react";
 
 import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
+import ErrorBoundary from "./components/ErrorBoundary";
 
 // Lazy load all pages
 const Home = lazy(() => import("./pages/Home"));
@@ -33,26 +34,30 @@ function App() {
       <LazyMotion features={domAnimation}>
         <Router>
           <div className="min-h-screen bg-[#FFFFFF] flex flex-col relative">
-            <Navbar />
-            <main className="flex-1 pt-16">
-              <Suspense fallback={<PageLoader />}>
-                <Routes>
-                  <Route path="/" element={<Home />} />
-                  <Route path="/write" element={<Write />} />
-                  <Route path="/explore" element={<Explore />} />
-                  <Route path="/explore/:slug" element={<BlogDetails />} />
-                  <Route path="/about" element={<About />} />
-                  <Route path="/help" element={<HelpCenter />} />
-                  <Route path="/tips" element={<WritingTips />} />
-                  <Route path="/guidelines" element={<CommunityGuidelines />} />
-                  <Route path="/privacy" element={<PrivacyPolicy />} />
-                  <Route path="/terms" element={<TermsOfService />} />
-                  <Route path="/cookies" element={<CookiePolicy />} />
-                  <Route path="/admin-portal" element={<AdminPortal />} />
-                </Routes>
-              </Suspense>
-            </main>
-            <Footer />
+            <ErrorBoundary>
+              <Navbar />
+              <main className="flex-1 pt-16">
+                <ErrorBoundary>
+                  <Suspense fallback={<PageLoader />}>
+                    <Routes>
+                      <Route path="/" element={<Home />} />
+                      <Route path="/write" element={<Write />} />
+                      <Route path="/explore" element={<Explore />} />
+                      <Route path="/explore/:slug" element={<BlogDetails />} />
+                      <Route path="/about" element={<About />} />
+                      <Route path="/help" element={<HelpCenter />} />
+                      <Route path="/tips" element={<WritingTips />} />
+                      <Route path="/guidelines" element={<CommunityGuidelines />} />
+                      <Route path="/privacy" element={<PrivacyPolicy />} />
+                      <Route path="/terms" element={<TermsOfService />} />
+                      <Route path="/cookies" element={<CookiePolicy />} />
+                      <Route path="/admin-portal" element={<AdminPortal />} />
+                    </Routes>
+                  </Suspense>
+                </ErrorBoundary>
+              </main>
+              <Footer />
+            </ErrorBoundary>
           </div>
         </Router>
       </LazyMotion>
