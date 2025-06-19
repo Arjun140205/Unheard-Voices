@@ -1,7 +1,9 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, Suspense } from "react";
 import { useParams, Link } from "react-router-dom";
 import { Helmet } from "react-helmet-async";
+import { useInView } from 'react-intersection-observer';
 import { recentBlogsCache } from "../utils/cache";
+import LazyImage from "../components/LazyImage";
 
 
 export default function BlogDetails() {
@@ -11,6 +13,12 @@ export default function BlogDetails() {
   const [voteCounts, setVoteCounts] = useState({ yes: 0, no: 0 });
   const [recommendations, setRecommendations] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [showFullContent, setShowFullContent] = useState(false);
+  
+  const { ref: contentRef, inView: contentInView } = useInView({
+    triggerOnce: true,
+    threshold: 0.1
+  });
 
   useEffect(() => {
     const fetchRecommendations = async () => {
@@ -93,91 +101,88 @@ export default function BlogDetails() {
   }
 
   return (
-    <div className="min-h-screen py-12 px-4 bg-gradient-to-br from-[#1a1a2e] via-[#16213e] to-[#0f3460]">
+    <>
       <Helmet>
-        <title>{blog.title} | Unheard Voices</title>
-        <meta name="description" content={blog.content.slice(0, 120)} />
-        <meta property="og:title" content={blog.title} />
-        <meta property="og:description" content={blog.content.slice(0, 120)} />
-        <meta property="og:type" content="article" />
-        <meta property="og:url" content={`https://yourdomain.com/explore/${blog.slug}`} />
+        <title>{blog?.title || "Blog Post"} | Unheard Voices</title>
       </Helmet>
-
-      <div className="max-w-3xl mx-auto bg-white/10 backdrop-blur-md p-6 rounded-xl text-white shadow-lg">
-        <h1 className="text-3xl font-bold text-pink-400">{blog.title}</h1>
-        <p className="text-sm text-white/50 mb-4">
-          Posted on{" "}
-          {new Date(blog.createdAt).toLocaleDateString("en-IN", {
-            year: "numeric",
-            month: "short",
-            day: "numeric",
-          })}
-        </p>
-        <div
-          className="prose prose-invert max-w-none"
-          dangerouslySetInnerHTML={{ __html: blog.content }}
-        />
-
-        {/* --- Poll Section --- */}
-        <div className="mt-10 bg-white/10 p-4 rounded-lg">
-          <h3 className="text-lg font-semibold mb-2 text-white">Did this resonate with you?</h3>
-          {!hasVoted ? (
-            <div className="flex gap-4">
-              <button
-                onClick={() => handleVote("yes")}
-                className="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded"
-              >
-                ✅ Yes
-              </button>
-              <button
-                onClick={() => handleVote("no")}
-                className="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded"
-              >
-                ❌ No
-              </button>
-            </div>
-          ) : (
-            <div className="mt-4">
-              <div className="mb-2">
-                <p className="text-sm text-white mb-1">Yes: {yesPercent}%</p>
-                <div className="w-full bg-gray-200 h-3 rounded">
-                  <div
-                    className="bg-green-500 h-3 rounded"
-                    style={{ width: `${yesPercent}%` }}
-                  />
-                </div>
-              </div>
-              <div>
-                <p className="text-sm text-white mb-1">No: {noPercent}%</p>
-                <div className="w-full bg-gray-200 h-3 rounded">
-                  <div
-                    className="bg-red-500 h-3 rounded"
-                    style={{ width: `${noPercent}%` }}
-                  />
-                </div>
-              </div>
-            </div>
-          )}
-        </div>
-      </div>
-
-      {recommendations.length > 0 && (
-        <div className="mt-10">
-          <h2 className="text-2xl font-bold text-pink-300 mb-4">You might also like...</h2>
-          <div className="flex gap-4 overflow-x-auto pb-2">
-            {recommendations.map((rec) => (
-              <Link
-                key={rec._id}
-                to={`/explore/${rec.slug}`}
-                className="min-w-[250px] bg-white/10 backdrop-blur-md rounded-lg p-4 hover:bg-white/20 transition duration-200 shadow"
-              >
-                <h3 className="text-lg font-semibold text-white">{rec.title}</h3>
-                <p className="text-white/60 text-sm line-clamp-3 mt-2">{rec.content.slice(0, 100)}...</p>
-              </Link>
-            ))}
+      
+      <div className="max-w-4xl mx-auto px-4 py-8">
+        {loading ? (
+          <div className="animate-pulse space-y-4">
+            <div className="h-8 bg-gray-200 rounded w-3/4"></div>
+            <div className="h-4 bg-gray-200 rounded w-1/2"></div>
+            <div className="h-64 bg-gray-200 rounded"></div>
           </div>
-        </div>
-      )}
-    </div>
+        ) : blog ? (
+          <>
+            <h1 className="text-4xl font-bold mb-4">{blog.title}</h1>
+            <div className="mb-8 text-gray-600">
+              {new Date(blog.createdAt).toLocaleDateString()}
+            </div>
+            
+            {blog.image && (
+              <LazyImage
+                src={blog.image}
+                alt={blog.title}
+                className="w-full h-auto rounded-lg mb-8"
+              />
+            )}
+            
+            <div ref={contentRef} className="prose max-w-none">
+              {contentInView ? (
+                showFullContent ? (
+                  <div dangerouslySetInnerHTML={{ __html: blog.content }} />
+                ) : (
+                  <>
+                    <div dangerouslySetInnerHTML={{ 
+                      __html: blog.content.slice(0, 1000) + "..."
+                    }} />
+                    <button
+                      onClick={() => setShowFullContent(true)}
+                      className="text-blue-500 hover:text-blue-700 mt-4"
+                    >
+                      Read More
+                    </button>
+                  </>
+                )
+              ) : (
+                <div className="animate-pulse space-y-4">
+                  <div className="h-4 bg-gray-200 rounded w-full"></div>
+                  <div className="h-4 bg-gray-200 rounded w-5/6"></div>
+                  <div className="h-4 bg-gray-200 rounded w-4/6"></div>
+                </div>
+              )}
+            </div>
+            
+            {/* Recommendations */}
+            <div className="mt-12">
+              <h2 className="text-2xl font-bold mb-6">Recommended Blogs</h2>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                {recommendations.map((rec) => (
+                  <Link
+                    key={rec.slug}
+                    to={`/explore/${rec.slug}`}
+                    className="block group"
+                  >
+                    {rec.image && (
+                      <LazyImage
+                        src={rec.image}
+                        alt={rec.title}
+                        className="w-full h-48 object-cover rounded-lg mb-4"
+                      />
+                    )}
+                    <h3 className="text-xl font-semibold group-hover:text-blue-500">
+                      {rec.title}
+                    </h3>
+                  </Link>
+                ))}
+              </div>
+            </div>
+          </>
+        ) : (
+          <div className="text-center py-12">Blog not found</div>
+        )}
+      </div>
+    </>
   );
 }
