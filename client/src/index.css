@@ -5,7 +5,7 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Remove the writing-bg class as we're handling the background directly in the component */
+
 
 /* Background handling */
 #root {
@@ -198,6 +198,37 @@
   .nav-link-hover:hover::after {
     transform: scaleX(1);
     transform-origin: left;
+  }
+}
+
+/* Loader Animation */
+.loader-dot {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background-color: #4B5563;
+  display: inline-block;
+  margin: 0 6px;
+  opacity: 0;
+  animation: dotFade 2s ease-in-out infinite;
+}
+
+.loader-dot:nth-child(1) { animation-delay: 0s; }
+.loader-dot:nth-child(2) { animation-delay: 0.3s; }
+.loader-dot:nth-child(3) { animation-delay: 0.6s; }
+
+@keyframes dotFade {
+  0%, 100% {
+    transform: translateY(0);
+    opacity: 0;
+  }
+  30% {
+    transform: translateY(-10px);
+    opacity: 1;
+  }
+  60% {
+    transform: translateY(0);
+    opacity: 0.5;
   }
 }
 
