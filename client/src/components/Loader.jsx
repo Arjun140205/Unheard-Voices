@@ -1,21 +1,46 @@
 import React from 'react';
+import { useLocation } from 'react-router-dom';
 
-const Loader = ({ fullScreen = false }) => {
+const getLoadingMessage = (pathname) => {
+  switch (pathname) {
+    case '/':
+      return 'discovering stories...';
+    case '/write':
+      return 'preparing your canvas...';
+    case '/explore':
+      return 'curating stories...';
+    case '/admin-portal':
+      return 'analyzing insights...';
+    case '/tips':
+      return 'gathering wisdom...';
+    default:
+      if (pathname.startsWith('/explore/')) {
+        return 'unfolding story...';
+      }
+      return 'weaving thoughts...';
+  }
+};
+
+const Loader = ({ fullScreen = false, customMessage }) => {
+  const location = useLocation();
+  const message = customMessage || getLoadingMessage(location.pathname);
+  
   const loaderContent = (
-    <div className="flex flex-col items-center justify-center">
-      <div className="relative">
-        {/* Main spinner */}
-        <div className="w-12 h-12 rounded-full border-t-2 border-b-2 border-blue-500 animate-spin"></div>
-        {/* Inner dot */}
-        <div className="absolute top-1/2 left-1/2 w-2 h-2 bg-blue-500 rounded-full transform -translate-x-1/2 -translate-y-1/2"></div>
+    <div className="flex flex-col items-center justify-center py-8">
+      <div className="flex items-center justify-center space-x-2">
+        <div className="w-2 h-2 bg-gray-400 rounded-full animate-inkDrop" />
+        <div className="w-2 h-2 bg-gray-400 rounded-full animate-inkDrop" style={{ animationDelay: '0.3s' }} />
+        <div className="w-2 h-2 bg-gray-400 rounded-full animate-inkDrop" style={{ animationDelay: '0.6s' }} />
       </div>
-      <div className="mt-4 text-gray-600 text-sm font-medium">Loading...</div>
+      <div className="mt-6 text-gray-500 text-sm font-serif tracking-wider">
+        {message}
+      </div>
     </div>
   );
 
   if (fullScreen) {
     return (
-      <div className="fixed inset-0 bg-white bg-opacity-90 z-50 flex items-center justify-center">
+      <div className="fixed inset-0 bg-white bg-opacity-95 z-50 flex items-center justify-center backdrop-blur-sm transition-opacity duration-300">
         {loaderContent}
       </div>
     );
