@@ -12,9 +12,31 @@ module.exports = {
         'garamond': ['"EB Garamond"', 'serif'],
         'lucida': ['"Lucida Calligraphy"', 'cursive'],
         'abril': ['"Abril Fatface"', 'cursive'],
-        'elsie':["Elsie", 'serif'],
+        'elsie': ["Elsie", 'serif'],
         'dancing': ["Dancing Script", 'cursive']
-
+      },
+      keyframes: {
+        inkDrop: {
+          '0%': { 
+            transform: 'translateY(0) scale(1)',
+            opacity: '0'
+          },
+          '30%': { 
+            transform: 'translateY(-10px) scale(1)',
+            opacity: '1'
+          },
+          '60%': { 
+            transform: 'translateY(0) scale(1)',
+            opacity: '0.5'
+          },
+          '100%': { 
+            transform: 'translateY(0) scale(1)',
+            opacity: '0'
+          }
+        }
+      },
+      animation: {
+        'inkDrop': 'inkDrop 2s ease-in-out infinite'
       },
       typography: {
         DEFAULT: {
@@ -28,10 +50,10 @@ module.exports = {
             },
           },
         },
-      },
-    },
+      }
+    }
   },
   plugins: [
-    require('@tailwindcss/typography'),
-  ],
+    require('@tailwindcss/typography')
+  ]
 }
