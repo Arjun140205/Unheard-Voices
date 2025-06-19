@@ -1,5 +1,6 @@
-import React from 'react';
+import React, { useEffect, useRef } from 'react';
 import { useLocation } from 'react-router-dom';
+import loaderVideo from '../assets/videos/loader.mp4';
 
 const getLoadingMessage = (pathname) => {
   switch (pathname) {
@@ -23,31 +24,67 @@ const getLoadingMessage = (pathname) => {
 
 const Loader = ({ fullScreen = false, customMessage }) => {
   const location = useLocation();
+  const videoRef = useRef(null);
   const message = customMessage || getLoadingMessage(location.pathname);
+
+  useEffect(() => {
+    // Reset and play the video whenever the loader mounts
+    if (videoRef.current) {
+      videoRef.current.currentTime = 0;
+      videoRef.current.play().catch(err => console.log('Video autoplay failed:', err));
+    }
+  }, []);
   
   const loaderContent = (
-    <div className="flex flex-col items-center justify-center py-8">
-      <div className="flex items-center justify-center space-x-2">
-        <div className="w-2 h-2 bg-gray-400 rounded-full animate-inkDrop" />
-        <div className="w-2 h-2 bg-gray-400 rounded-full animate-inkDrop" style={{ animationDelay: '0.3s' }} />
-        <div className="w-2 h-2 bg-gray-400 rounded-full animate-inkDrop" style={{ animationDelay: '0.6s' }} />
+    <div className="flex flex-col items-center justify-center w-full h-full relative overflow-hidden">
+      {/* Video Background */}
+      <div className="absolute inset-0 w-full h-full">
+        <video
+          ref={videoRef}
+          className="w-full h-full object-cover"
+          playsInline
+          muted
+          loop={false}
+          autoPlay
+        >
+          <source src={loaderVideo} type="video/mp4" />
+        </video>
+        {/* Semi-transparent overlay */}
+        <div className="absolute inset-0 bg-white/30 backdrop-blur-[2px]"></div>
       </div>
-      <div className="mt-6 text-gray-500 text-sm font-serif tracking-wider">
-        {message}
+
+      {/* Content */}
+      <div className="relative z-10 flex flex-col items-center justify-center w-full h-full">
+        <div className="flex items-center justify-center space-x-3 mb-8">
+          {[0, 1, 2].map((index) => (
+            <div
+              key={index}
+              className="w-3 h-3 bg-gray-600/80 rounded-full animate-inkDrop"
+              style={{
+                animationDelay: `${index * 0.4}s`,
+              }}
+            />
+          ))}
+        </div>
+
+        {/* Message */}
+        <div className="text-gray-800 text-lg font-serif tracking-widest animate-loaderText bg-white/40 px-6 py-3 rounded-full backdrop-blur-sm">
+          {message}
+        </div>
       </div>
     </div>
   );
 
   if (fullScreen) {
     return (
-      <div className="fixed inset-0 bg-white bg-opacity-95 z-50 flex items-center justify-center backdrop-blur-sm transition-opacity duration-300">
+      <div className="fixed inset-0 z-50 w-screen h-screen">
         {loaderContent}
       </div>
     );
   }
 
   return (
-    <div className="min-h-[200px] flex items-center justify-center">
+    <div className="w-full h-[50vh] min-h-[400px]">
       {loaderContent}
     </div>
   );
