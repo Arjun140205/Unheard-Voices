@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { useParams, Link } from "react-router-dom";
 import { Helmet } from "react-helmet-async";
+import { recentBlogsCache } from "../utils/cache";
 
 
 export default function BlogDetails() {
@@ -9,6 +10,7 @@ export default function BlogDetails() {
   const [hasVoted, setHasVoted] = useState(false);
   const [voteCounts, setVoteCounts] = useState({ yes: 0, no: 0 });
   const [recommendations, setRecommendations] = useState([]);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const fetchRecommendations = async () => {
@@ -25,19 +27,36 @@ export default function BlogDetails() {
 
   useEffect(() => {
     const fetchBlog = async () => {
+      setLoading(true);
       try {
         const res = await fetch(`http://localhost:4000/api/blogs/${slug}`);
         const data = await res.json();
         setBlog(data);
         setVoteCounts({ yes: data.poll?.yes || 0, no: data.poll?.no || 0 });
 
+        // Add to recent blogs cache
+        if (data) {
+          recentBlogsCache.add({
+            slug: data.slug,
+            title: data.title,
+            content: data.content.slice(0, 200) // Cache preview only
+          });
+        }
+
         const voted = localStorage.getItem(`voted_${data._id}`);
         setHasVoted(!!voted);
       } catch (err) {
         console.error("Failed to load blog", err);
+      } finally {
+        setLoading(false);
       }
     };
-    fetchBlog();
+
+    // Check if we have the blog in cache
+    const cachedBlog = recentBlogsCache.check(slug);
+    if (!cachedBlog) {
+      fetchBlog();
+    }
   }, [slug]);
 
   const handleVote = async (type) => {
@@ -65,8 +84,12 @@ export default function BlogDetails() {
   const yesPercent = totalVotes ? Math.round((voteCounts.yes / totalVotes) * 100) : 0;
   const noPercent = totalVotes ? 100 - yesPercent : 0;
 
-  if (!blog) {
+  if (loading) {
     return <div className="text-white text-center mt-10">Loading...</div>;
+  }
+
+  if (!blog) {
+    return <div className="text-white text-center mt-10">Blog not found</div>;
   }
 
   return (
