@@ -2,6 +2,7 @@ import express from 'express';
 import mongoose from 'mongoose';
 import cors from 'cors';
 import dotenv from 'dotenv';
+import compression from 'compression';
 import blogRoutes from './routes/blogRoutes.js';
 import adminRoutes from './routes/adminRoutes.js';
 
@@ -10,6 +11,18 @@ dotenv.config();
 const app = express();
 
 // Middleware
+app.use(compression({
+  level: 6, // Compression level (0-9, higher = better compression but more CPU)
+  threshold: 100, // Only compress responses larger than 100 bytes
+  filter: (req, res) => {
+    // Don't compress responses with this header
+    if (req.headers['x-no-compression']) {
+      return false;
+    }
+    // Use compression filter function from the module
+    return compression.filter(req, res);
+  }
+}));
 app.use(cors());
 app.use(express.json()); // To parse JSON bodies
 
