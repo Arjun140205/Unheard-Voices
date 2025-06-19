@@ -4,6 +4,7 @@ import { Helmet } from "react-helmet-async";
 import { useInView } from 'react-intersection-observer';
 import { recentBlogsCache } from "../utils/cache";
 import LazyImage from "../components/LazyImage";
+import Error from "../components/Error";
 
 
 export default function BlogDetails() {
@@ -13,6 +14,7 @@ export default function BlogDetails() {
   const [voteCounts, setVoteCounts] = useState({ yes: 0, no: 0 });
   const [recommendations, setRecommendations] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
   const [showFullContent, setShowFullContent] = useState(false);
   
   const { ref: contentRef, inView: contentInView } = useInView({
@@ -20,51 +22,60 @@ export default function BlogDetails() {
     threshold: 0.1
   });
 
-  useEffect(() => {
-    const fetchRecommendations = async () => {
-      try {
-        const res = await fetch(`http://localhost:4000/api/blogs/recommend/${slug}`);
-        const data = await res.json();
-        setRecommendations(data);
-      } catch (err) {
-        console.error("Failed to fetch recommendations", err);
-      }
-    };
-    fetchRecommendations();
-  }, [slug]);
-
-  useEffect(() => {
-    const fetchBlog = async () => {
+  const fetchBlog = async () => {
+    try {
       setLoading(true);
-      try {
-        const res = await fetch(`http://localhost:4000/api/blogs/${slug}`);
-        const data = await res.json();
-        setBlog(data);
-        setVoteCounts({ yes: data.poll?.yes || 0, no: data.poll?.no || 0 });
-
-        // Add to recent blogs cache
-        if (data) {
-          recentBlogsCache.add({
-            slug: data.slug,
-            title: data.title,
-            content: data.content.slice(0, 200) // Cache preview only
-          });
-        }
-
-        const voted = localStorage.getItem(`voted_${data._id}`);
-        setHasVoted(!!voted);
-      } catch (err) {
-        console.error("Failed to load blog", err);
-      } finally {
-        setLoading(false);
+      setError(null);
+      const res = await fetch(`http://localhost:4000/api/blogs/${slug}`);
+      
+      if (!res.ok) {
+        throw new Error(
+          res.status === 404 
+            ? "Blog post not found" 
+            : "Failed to load blog post"
+        );
       }
-    };
+      
+      const data = await res.json();
+      setBlog(data);
+      setVoteCounts({ yes: data.poll?.yes || 0, no: data.poll?.no || 0 });
 
-    // Check if we have the blog in cache
-    const cachedBlog = recentBlogsCache.check(slug);
-    if (!cachedBlog) {
-      fetchBlog();
+      if (data) {
+        recentBlogsCache.add({
+          slug: data.slug,
+          title: data.title,
+          content: data.content.slice(0, 200)
+        });
+      }
+
+      const voted = localStorage.getItem(`voted_${data._id}`);
+      setHasVoted(!!voted);
+    } catch (err) {
+      console.error("Failed to load blog", err);
+      setError(err.message || "Failed to load blog post");
+    } finally {
+      setLoading(false);
     }
+  };
+
+  const fetchRecommendations = async () => {
+    try {
+      const res = await fetch(`http://localhost:4000/api/blogs/recommend/${slug}`);
+      if (!res.ok) {
+        throw new Error("Failed to load recommendations");
+      }
+      const data = await res.json();
+      setRecommendations(data);
+    } catch (err) {
+      console.error("Failed to fetch recommendations", err);
+      // Don't show error UI for recommendations failure
+      setRecommendations([]);
+    }
+  };
+
+  useEffect(() => {
+    fetchBlog();
+    fetchRecommendations();
   }, [slug]);
 
   const handleVote = async (type) => {
@@ -98,6 +109,19 @@ export default function BlogDetails() {
 
   if (!blog) {
     return <div className="text-white text-center mt-10">Blog not found</div>;
+  }
+
+  if (error) {
+    return (
+      <Error 
+        message={error}
+        subMessage="Please try again later"
+        retry={() => {
+          fetchBlog();
+          fetchRecommendations();
+        }}
+      />
+    );
   }
 
   return (
