@@ -5,6 +5,7 @@ import { useInView } from 'react-intersection-observer';
 import exploreBg from '../assets/bg.jpg'; // Using existing bg.jpg as it fits the theme
 import LazyImage from "../components/LazyImage";
 import Error from "../components/Error";
+import Loader from "../components/Loader";
 
 const BackgroundContainer = ({ children }) => (
   <div className="relative min-h-screen">
@@ -206,20 +207,7 @@ export default function Explore() {
             </div>
           )}
 
-          {loading && (
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mt-8">
-              {[1, 2, 3].map((n) => (
-                <div key={n} className="animate-pulse">
-                  <div className="bg-gray-200 h-48 rounded-t-lg"></div>
-                  <div className="p-6 bg-white rounded-b-lg">
-                    <div className="h-6 bg-gray-200 rounded w-3/4 mb-4"></div>
-                    <div className="h-4 bg-gray-200 rounded w-full mb-2"></div>
-                    <div className="h-4 bg-gray-200 rounded w-2/3"></div>
-                  </div>
-                </div>
-              ))}
-            </div>
-          )}
+          {loading && <Loader />}
 
           {error && blogs.length > 0 && (
             <div className="mt-8">
