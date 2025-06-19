@@ -1,11 +1,12 @@
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import { BrowserRouter as Router, Routes, Route, useLocation } from "react-router-dom";
 import { LazyMotion, domAnimation } from "framer-motion";
 import { HelmetProvider } from "react-helmet-async";
-import { Suspense, lazy } from "react";
+import { Suspense, lazy, useState, useEffect } from "react";
 
 import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
 import ErrorBoundary from "./components/ErrorBoundary";
+import Loader from "./components/Loader";
 
 // Lazy load all pages
 const Home = lazy(() => import("./pages/Home"));
@@ -21,12 +22,24 @@ const TermsOfService = lazy(() => import("./pages/TermsOfService"));
 const CookiePolicy = lazy(() => import("./pages/CookiePolicy"));
 const AdminPortal = lazy(() => import("./pages/AdminPortal"));
 
-// Loading fallback component
-const PageLoader = () => (
-  <div className="min-h-screen flex items-center justify-center">
-    <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-500"></div>
-  </div>
-);
+// RouteChangeLoader component to handle route transitions
+const RouteChangeLoader = () => {
+  const location = useLocation();
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    setIsLoading(true);
+    // Simulate minimum loading time for smoother transitions
+    const timer = setTimeout(() => {
+      setIsLoading(false);
+    }, 500);
+    return () => clearTimeout(timer);
+  }, [location]);
+
+  if (!isLoading) return null;
+
+  return <Loader fullScreen />;
+};
 
 function App() {
   return (
@@ -36,9 +49,10 @@ function App() {
           <div className="min-h-screen bg-[#FFFFFF] flex flex-col relative">
             <ErrorBoundary>
               <Navbar />
+              <RouteChangeLoader />
               <main className="flex-1 pt-16">
                 <ErrorBoundary>
-                  <Suspense fallback={<PageLoader />}>
+                  <Suspense fallback={<Loader fullScreen />}>
                     <Routes>
                       <Route path="/" element={<Home />} />
                       <Route path="/write" element={<Write />} />
