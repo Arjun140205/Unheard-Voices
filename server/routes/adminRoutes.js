@@ -2,9 +2,13 @@ import express from 'express';
 import dotenv from 'dotenv';
 import Blog from '../models/Blog.js';
 import { startOfMonth, subDays } from 'date-fns';
+import { apiLimiter } from '../middleware/rateLimiter.js';
 
 dotenv.config();
 const router = express.Router();
+
+// Apply API rate limiter to all admin routes
+router.use(apiLimiter);
 
 // Log middleware to debug route access
 router.use((req, res, next) => {
