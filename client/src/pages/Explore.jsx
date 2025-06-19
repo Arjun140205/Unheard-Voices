@@ -4,6 +4,7 @@ import { Helmet } from "react-helmet-async";
 import { useInView } from 'react-intersection-observer';
 import exploreBg from '../assets/bg.jpg'; // Using existing bg.jpg as it fits the theme
 import LazyImage from "../components/LazyImage";
+import Error from "../components/Error";
 
 const BackgroundContainer = ({ children }) => (
   <div className="relative min-h-screen">
@@ -23,8 +24,10 @@ const BackgroundContainer = ({ children }) => (
 export default function Explore() {
   const [blogs, setBlogs] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
   const [page, setPage] = useState(1);
   const [hasMore, setHasMore] = useState(true);
+  const [loadingMore, setLoadingMore] = useState(false);
   
   const { ref: loadMoreRef, inView: loadMoreInView } = useInView({
     threshold: 0.5,
@@ -33,7 +36,23 @@ export default function Explore() {
 
   const fetchBlogs = async (pageNum) => {
     try {
+      setError(null);
+      if (pageNum === 1) {
+        setLoading(true);
+      } else {
+        setLoadingMore(true);
+      }
+
       const res = await fetch(`http://localhost:4000/api/blogs?page=${pageNum}&limit=10`);
+      
+      if (!res.ok) {
+        throw new Error(
+          res.status === 404 
+            ? "No blogs found" 
+            : "Failed to load blogs"
+        );
+      }
+      
       const data = await res.json();
       
       if (pageNum === 1) {
@@ -43,10 +62,13 @@ export default function Explore() {
       }
       
       setHasMore(data.length === 10);
-      setLoading(false);
     } catch (err) {
       console.error("Failed to load blogs", err);
+      setError(err.message || "Failed to load blogs");
+      setHasMore(false);
+    } finally {
       setLoading(false);
+      setLoadingMore(false);
     }
   };
 
@@ -55,14 +77,14 @@ export default function Explore() {
   }, []);
 
   useEffect(() => {
-    if (loadMoreInView && hasMore && !loading) {
+    if (loadMoreInView && hasMore && !loading && !loadingMore && !error) {
       setPage(prev => {
         const nextPage = prev + 1;
         fetchBlogs(nextPage);
         return nextPage;
       });
     }
-  }, [loadMoreInView, hasMore, loading]);
+  }, [loadMoreInView, hasMore, loading, loadingMore, error]);
 
   const handleCopy = (html) => {
     const tempElement = document.createElement("div");
@@ -73,6 +95,16 @@ export default function Explore() {
       alert("Content copied to clipboard!");
     });
   };
+
+  if (error && blogs.length === 0) {
+    return (
+      <Error 
+        message={error}
+        subMessage="We couldn't load the blogs. Please try again later."
+        retry={() => fetchBlogs(1)}
+      />
+    );
+  }
 
   return (
     <BackgroundContainer>
@@ -189,7 +221,17 @@ export default function Explore() {
             </div>
           )}
 
-          {hasMore && (
+          {error && blogs.length > 0 && (
+            <div className="mt-8">
+              <Error 
+                message="Couldn't load more blogs"
+                subMessage="Please try again"
+                retry={() => fetchBlogs(page)}
+              />
+            </div>
+          )}
+
+          {!error && hasMore && (
             <div
               ref={loadMoreRef}
               className="mt-8 text-center"
