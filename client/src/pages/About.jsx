@@ -4,126 +4,97 @@ import { Link } from "react-router-dom";
 const About = () => {
   return (
     <article className="max-w-3xl mx-auto px-4 py-20 sm:py-32">
-      <header className="text-center mb-20">
+      {/* Header */}
+      <header className="text-center mb-16">
         <h1 className="text-4xl sm:text-5xl font-serif font-bold text-gray-900 leading-tight">
-          Some voices were never meant to echo in silence.
+          Some voices are not meant to linger in silence.
         </h1>
         <p className="mt-6 text-lg text-gray-600">
-          Welcome to the place where words don’t need permission to matter.
+          Welcome to a sanctuary where every word finds its worth.
         </p>
       </header>
 
-      <section className="space-y-10 text-gray-800 text-lg leading-relaxed">
-        <p>
-          Unheard Voices isn’t just a platform, it’s a soft place to land.
+      {/* Intro Section */}
+      <section className="mb-10">
+        <h2 className="text-2xl font-serif font-semibold mb-4">What is Unheard Voices?</h2>
+        <p className="mb-4">
+          Unheard Voices is not merely a platform; it is a haven for the unspoken, a refuge for thoughts that yearn to be heard.
         </p>
-
         <p>
-          No likes. No algorithms. No “you should post this instead.”
-          <br />
-          Just stories that hit where it hurts, heals, and stays.
+          Here, there are no algorithms dictating your worth, no metrics measuring your meaning. Only stories—raw, resonant, and real—waiting to be shared and savored.
         </p>
+      </section>
 
-        <p>
-          Whether you’re feeling too much or nothing at all —
-          <br />
-          this space was made for you.
-        </p>
-
-        <blockquote className="border-l-4 border-black pl-5 text-gray-700 italic">
-          The most important stories are often the ones we never get to tell.
+      {/* Quote Section */}
+      <section className="my-12">
+        <blockquote className="border-l-4 border-gray-300 pl-6 text-gray-700 italic text-lg font-serif bg-gray-50 py-4 rounded">
+          “The most vital stories are those we seldom dare to tell.”
         </blockquote>
+      </section>
 
-        <p>
-          Here, you don’t need to be a writer. You just need to be honest.
-          <br />
-          Journal entries. Midnight thoughts. Open letters to no one.
-          <br />
-          They all belong here.
-        </p>
+      {/* How It Works Section */}
+      <section className="mb-10">
+        <h2 className="text-2xl font-serif font-semibold mb-4">How It Works</h2>
+        <ul className="list-disc list-inside space-y-2 text-gray-800">
+          <li>Write without the burden of followers or the pressure of perfection.</li>
+          <li>Read without endless scrolling or curated feeds.</li>
+          <li>Connect through honesty, not pretense.</li>
+        </ul>
+      </section>
 
-        <div className="bg-gray-50 p-8 rounded-xl shadow-md text-center my-16">
-          <p className="text-xl text-gray-900 font-medium">
-            Write without a following. <br />
-            Read without scrolling. <br />
-            Connect without pretending.
-          </p>
-        </div>
-
-        <hr className="border-t border-gray-300 my-10" />
-
-        <h2 className="text-2xl sm:text-3xl font-serif font-semibold mt-16 mb-6">
-          For the ones who feel too much
-        </h2>
-
-        <p>
-          You don’t need to write a bestseller to be understood.
-          <br />
-          You don’t need a platform to be heard.
-          <br />
-          You just need a place that listens.
-        </p>
-
-        <div className="grid md:grid-cols-2 gap-12 mt-16">
-          <div className="text-center space-y-6 p-8 bg-white shadow-lg rounded-xl">
-            <h3 className="text-2xl font-serif font-bold">Writers</h3>
-            <p>
-              Pour it out — the messy, the raw, the healing.
-              <br />
-              This is where vulnerability isn’t weakness. It’s art.
+      {/* For Whom Section */}
+      <section className="mb-10">
+        <h2 className="text-2xl font-serif font-semibold mb-4">Who is this for?</h2>
+        <div className="grid md:grid-cols-2 gap-8">
+          {/* Writers Card */}
+          <div className="bg-white border border-gray-200 rounded-lg p-6 text-center shadow-sm">
+            <h3 className="text-xl font-serif font-bold mb-2">Writers</h3>
+            <p className="mb-4">
+              Pour forth your truths—the beautiful, the broken, the becoming. Here, vulnerability is not a weakness; it is your art.
             </p>
             <Link
               to="/write"
-              className="inline-block mt-4 px-6 py-3 border-2 border-gray-900 text-gray-900 hover:bg-gray-900 hover:text-white transition rounded-full"
+              className="inline-block px-5 py-2 border border-gray-900 text-gray-900 hover:bg-gray-900 hover:text-white transition rounded-full text-sm"
             >
               Start Writing
             </Link>
           </div>
-
-          <div className="text-center space-y-6 p-8 bg-white shadow-lg rounded-xl">
-            <h3 className="text-2xl font-serif font-bold">Readers</h3>
-            <p>
-              Read what people never post on Instagram.
-              <br />
-              Real moments. Unedited thoughts. Souls on paper.
+          {/* Readers Card */}
+          <div className="bg-white border border-gray-200 rounded-lg p-6 text-center shadow-sm">
+            <h3 className="text-xl font-serif font-bold mb-2">Readers</h3>
+            <p className="mb-4">
+              Discover what is rarely revealed elsewhere. Unfiltered moments. Unvarnished thoughts. Souls laid bare.
             </p>
             <Link
               to="/explore"
-              className="inline-block mt-4 px-6 py-3 border-2 border-gray-900 text-gray-900 hover:bg-gray-900 hover:text-white transition rounded-full"
+              className="inline-block px-5 py-2 border border-gray-900 text-gray-900 hover:bg-gray-900 hover:text-white transition rounded-full text-sm"
             >
               Start Reading
             </Link>
           </div>
         </div>
+      </section>
 
-        <hr className="border-t border-gray-300 my-20" />
-
-        <h2 className="text-2xl sm:text-3xl font-serif font-semibold mt-20 mb-6">
-          This isn’t a product. It’s a promise.
-        </h2>
-
+      {/* Promise/Values Section */}
+      <section className="mb-10">
+        <h2 className="text-2xl font-serif font-semibold mb-4">Our Promise</h2>
+        <p className="mb-2">
+          We do not track your clicks, commodify your story, or chase trends. We are not here for engagement, but for genuine connection.
+        </p>
         <p>
-          We don’t track your clicks. We don’t sell your story. We don’t push what trends.
-          <br />
-          We’re not here for engagement — we’re here for connection.
+          If your spirit seeks to speak, to whisper, to weep, or simply to exist—let it.
         </p>
+      </section>
 
-        <p>
-          If something inside you needs to speak, whisper, cry, confess, or simply exist — let it out.
-        </p>
-
-        <p className="text-xl font-medium text-center mt-16">
-          And when you’re ready…
-        </p>
-
-        <div className="text-center mt-8">
-          <Link
-            to="/write"
-            className="inline-block bg-gray-900 text-white px-10 py-4 text-lg font-semibold rounded-full hover:bg-gray-800 transition"
-          >
-            Write Something Real
-          </Link>
-        </div>
+      {/* Final Call to Action */}
+      <section className="text-center mt-16">
+        <h2 className="text-xl font-medium mb-6">Ready to share your truth?</h2>
+        <Link
+          to="/write"
+          className="inline-block bg-gray-900 text-white px-10 py-4 text-lg font-semibold rounded-full hover:bg-gray-800 transition"
+        >
+          Write Something Real
+        </Link>
       </section>
     </article>
   );
