@@ -1,6 +1,6 @@
 import React from 'react';
 
-const Error = ({ 
+const ErrorMessage = ({ 
   message = "Something went wrong", 
   subMessage = "Please try again later",
   retry = null 
@@ -36,4 +36,4 @@ const Error = ({
   );
 };
 
-export default Error;
+export default ErrorMessage;
