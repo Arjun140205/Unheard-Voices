@@ -150,80 +150,57 @@ export default function Explore() {
               </Link>
             </div>
           ) : (
-            <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
+            <div className="grid gap-8 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
               {blogs.map((blog) => (
                 <div
                   key={blog._id}
-                  className={`bg-white rounded-lg shadow-xl overflow-hidden transition-all duration-300 hover:shadow-2xl hover:-translate-y-1 border border-gray-100 ${
-                    highlightedBlog === blog.slug 
-                      ? 'animate-pulse scale-105 shadow-2xl border-blue-300 ring-4 ring-blue-200' 
-                      : ''
+                  className={`group relative bg-[#FAF6F2] border border-rose-100 rounded-xl shadow transition-all duration-200 hover:shadow-xl hover:border-rose-200 hover:scale-[1.03] overflow-hidden ${
+                    highlightedBlog === blog.slug ? 'ring-2 ring-rose-200 scale-105' : ''
                   }`}
                 >
-                  <div className="p-6">
-                    <div className="flex items-center justify-between mb-4">
-                      <span className="text-sm text-gray-500 font-serif italic">
-                        {new Date(blog.createdAt).toLocaleDateString('en-US', {
-                          year: 'numeric',
-                          month: 'long',
-                          day: 'numeric'
-                        })}
-                      </span>
-                      {highlightedBlog === blog.slug && (
-                        <span className="text-xs bg-blue-100 text-blue-600 px-2 py-1 rounded-full font-medium">
-                          Admin View
-                        </span>
-                      )}
-                    </div>
-
-                    <h2 className="text-2xl font-serif font-semibold text-gray-900 mb-3 line-clamp-2">
+                  {/* Vertical accent */}
+                  <div className="absolute left-0 top-0 h-full w-1 bg-rose-100 rounded-tr-xl rounded-br-xl" />
+                  {/* Feather watermark */}
+                  <svg className="absolute bottom-3 right-3 w-8 h-8 text-rose-50 opacity-60 pointer-events-none" fill="none" viewBox="0 0 32 32"><path d="M6 28 L10 24 L14 20 L18 16 L22 12 L26 10 L28 12 L26 16 L22 20 L18 24 L14 28 L10 30 L6 28" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round"/></svg>
+                  <div className="p-7 pl-6 flex flex-col min-h-[220px]">
+                    <span className="text-xs text-gray-400 italic mb-2">{new Date(blog.createdAt).toLocaleDateString()}</span>
+                    <Link to={`/explore/${blog.slug}`}
+                      className="text-2xl font-serif font-bold text-gray-900 mb-1 group-hover:underline transition-all duration-200 line-clamp-2"
+                    >
                       {blog.title}
-                    </h2>
-
-                    {blog.tags && blog.tags.length > 0 && (
-                      <div className="flex flex-wrap gap-2 mb-4">
-                        {blog.tags.map((tag, index) => (
-                          <span
-                            key={index}
-                            className="px-3 py-1 text-xs bg-blue-50 text-blue-600 rounded-full font-medium"
-                          >
-                            {tag}
-                          </span>
-                        ))}
-                      </div>
-                    )}
-
-                    <div className="prose prose-sm text-gray-600 mb-4 line-clamp-3">
+                    </Link>
+                    {/* Divider */}
+                    <div className="w-8 border-t border-rose-100 my-2" />
+                    <div className="text-gray-600 text-base italic mb-3 line-clamp-2 relative">
                       <div
                         dangerouslySetInnerHTML={{
-                          __html: blog.content.substring(0, 150) + "..."
+                          __html: blog.content.substring(0, 120) + "..."
                         }}
                       />
+                      {/* Fade-out effect */}
+                      <div className="absolute bottom-0 left-0 w-full h-6 bg-gradient-to-t from-rose-50/80 to-transparent pointer-events-none" />
                     </div>
-
-                    <div className="flex items-center justify-between mt-6 pt-4 border-t border-gray-100">
-                      <Link
-                        to={`/explore/${blog.slug}`}
-                        className="text-blue-600 hover:text-blue-800 font-medium transition-colors duration-200"
-                      >
-                        Read full story →
-                      </Link>
-                      <button
-                        onClick={() => handleCopy(blog.content)}
-                        className="text-gray-400 hover:text-gray-600 transition-colors duration-200"
-                        title="Copy content"
-                      >
-                        <svg
-                          xmlns="http://www.w3.org/2000/svg"
-                          className="h-5 w-5"
-                          viewBox="0 0 20 20"
-                          fill="currentColor"
+                    <div className="flex flex-wrap gap-2 mb-2">
+                      {blog.tags && blog.tags.length > 0 && blog.tags.map((tag, index) => (
+                        <span
+                          key={index}
+                          className="px-3 py-1 text-xs bg-rose-50 text-rose-400 rounded-full font-medium"
                         >
-                          <path d="M8 3a1 1 0 011-1h2a1 1 0 110 2H9a1 1 0 01-1-1z" />
-                          <path d="M6 3a2 2 0 00-2 2v11a2 2 0 002 2h8a2 2 0 002-2V5a2 2 0 00-2-2 3 3 0 01-3 3H9a3 3 0 01-3-3z" />
-                        </svg>
-                      </button>
+                          {tag}
+                        </span>
+                      ))}
                     </div>
+                    <Link
+                      to={`/explore/${blog.slug}`}
+                      className="absolute right-7 bottom-7 opacity-0 group-hover:opacity-100 text-rose-400 hover:text-rose-600 text-sm font-medium transition-opacity duration-200"
+                    >
+                      Read →
+                    </Link>
+                    {highlightedBlog === blog.slug && (
+                      <span className="absolute top-3 right-3 text-xs bg-rose-50 text-rose-400 px-2 py-1 rounded-full font-medium">
+                        Admin View
+                      </span>
+                    )}
                   </div>
                 </div>
               ))}
@@ -247,7 +224,7 @@ export default function Explore() {
               ref={loadMoreRef}
               className="mt-8 text-center"
             >
-              <div className="animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-blue-500 mx-auto"></div>
+              <div className="animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-rose-500 mx-auto"></div>
             </div>
           )}
         </div>
