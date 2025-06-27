@@ -130,7 +130,28 @@ const AdminPortal = () => {
     localStorage.removeItem('adminToken');
     setIsAuthenticated(false);
     setAccessToken('');
+    setBlogs([]);
+    setAnalytics({
+      totalBlogs: 0,
+      flaggedBlogs: 0,
+      blogsThisMonth: 0,
+      topTags: [],
+      reactionStats: {
+        related: 0,
+        thoughtful: 0,
+        touched: 0,
+        inspired: 0
+      },
+      dailyPosts: []
+    });
     navigate('/');
+  };
+
+  const handleViewBlog = (blogSlug) => {
+    // Store the blog slug in localStorage to highlight it on the explore page
+    localStorage.setItem('highlightBlog', blogSlug);
+    // Navigate to explore page
+    navigate('/explore');
   };
 
   // Login Form
@@ -541,14 +562,12 @@ const AdminPortal = () => {
                           >
                             Delete
                           </button>
-                          <a
-                            href={`/blog/${blog.slug}`}
-                            target="_blank"
-                            rel="noopener noreferrer"
+                          <button
+                            onClick={() => handleViewBlog(blog.slug)}
                             className="text-[#5C6B73] hover:text-[#63B3ED] transition-colors duration-200 font-serif"
                           >
                             View
-                          </a>
+                          </button>
                         </td>
                       </tr>
                     ))}
