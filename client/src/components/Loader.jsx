@@ -1,6 +1,5 @@
-import React, { useEffect, useRef } from 'react';
+import React from 'react';
 import { useLocation } from 'react-router-dom';
-import loaderVideo from '../assets/videos/loader.mp4';
 
 const getLoadingMessage = (pathname) => {
   switch (pathname) {
@@ -24,67 +23,64 @@ const getLoadingMessage = (pathname) => {
 
 const Loader = ({ fullScreen = false, customMessage }) => {
   const location = useLocation();
-  const videoRef = useRef(null);
   const message = customMessage || getLoadingMessage(location.pathname);
 
-  useEffect(() => {
-    // Reset and play the video whenever the loader mounts
-    if (videoRef.current) {
-      videoRef.current.currentTime = 0;
-      videoRef.current.play().catch(err => console.log('Video autoplay failed:', err));
-    }
-  }, []);
-  
   const loaderContent = (
-    <div className="flex flex-col items-center justify-center w-full h-full relative overflow-hidden">
-      {/* Video Background */}
-      <div className="absolute inset-0 w-full h-full">
-        <video
-          ref={videoRef}
-          className="w-full h-full object-cover"
-          playsInline
-          muted
-          loop={false}
-          autoPlay
+    <div className="flex flex-col items-center justify-center w-full h-full">
+      {/* Feather SVG with gentle floating animation */}
+      <div className="mb-8 animate-float">
+        <svg
+          width="60"
+          height="40"
+          viewBox="0 0 60 40"
+          fill="none"
+          xmlns="http://www.w3.org/2000/svg"
+          className="text-gray-400"
         >
-          <source src={loaderVideo} type="video/mp4" />
-        </video>
-        {/* Semi-transparent overlay */}
-        <div className="absolute inset-0 bg-white/30 backdrop-blur-[2px]"></div>
+          {/* Feather path - elegant, flowing lines */}
+          <path
+            d="M10 35 L15 30 L20 25 L25 20 L30 15 L35 10 L40 8 L45 10 L50 15 L55 20 L58 25 L60 30 L58 35 L55 38 L50 40 L45 38 L40 35 L35 30 L30 25 L25 20 L20 15 L15 10 L10 8 L5 10 L2 15 L0 20 L2 25 L5 30 L10 35"
+            stroke="currentColor"
+            strokeWidth="1.5"
+            strokeLinecap="round"
+            fill="none"
+            opacity="0.7"
+          />
+          {/* Feather quill */}
+          <path
+            d="M30 15 L30 5 L28 3 L32 3 L30 5"
+            stroke="currentColor"
+            strokeWidth="1"
+            fill="none"
+            opacity="0.8"
+          />
+          {/* Subtle feather details */}
+          <path
+            d="M25 20 L35 20 M20 25 L40 25 M15 30 L45 30"
+            stroke="currentColor"
+            strokeWidth="0.5"
+            opacity="0.4"
+          />
+        </svg>
       </div>
 
-      {/* Content */}
-      <div className="relative z-10 flex flex-col items-center justify-center w-full h-full">
-        <div className="flex items-center justify-center space-x-3 mb-8">
-          {[0, 1, 2].map((index) => (
-            <div
-              key={index}
-              className="w-3 h-3 bg-gray-600/80 rounded-full animate-inkDrop"
-              style={{
-                animationDelay: `${index * 0.4}s`,
-              }}
-            />
-          ))}
-        </div>
-
-        {/* Message */}
-        <div className="text-gray-800 text-lg font-serif tracking-widest animate-loaderText bg-white/40 px-6 py-3 rounded-full backdrop-blur-sm">
-          {message}
-        </div>
+      {/* Loading message */}
+      <div className="text-gray-600 text-lg font-serif tracking-wide animate-pulse">
+        {message}
       </div>
     </div>
   );
 
   if (fullScreen) {
     return (
-      <div className="fixed inset-0 z-50 w-screen h-screen">
+      <div className="fixed inset-0 z-50 w-screen h-screen bg-white/95 backdrop-blur-sm">
         {loaderContent}
       </div>
     );
   }
 
   return (
-    <div className="w-full h-[50vh] min-h-[400px]">
+    <div className="w-full h-[50vh] min-h-[400px] bg-white/50">
       {loaderContent}
     </div>
   );
