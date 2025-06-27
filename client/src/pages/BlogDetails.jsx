@@ -4,7 +4,7 @@ import { Helmet } from "react-helmet-async";
 import { useInView } from 'react-intersection-observer';
 import { recentBlogsCache } from "../utils/cache";
 import LazyImage from "../components/LazyImage";
-import Error from "../components/Error";
+import ErrorMessage from "../components/Error";
 import Loader from "../components/Loader";
 
 
@@ -114,7 +114,7 @@ export default function BlogDetails() {
 
   if (error) {
     return (
-      <Error 
+      <ErrorMessage 
         message={error}
         subMessage="Please try again later"
         retry={() => {
