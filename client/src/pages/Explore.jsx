@@ -4,7 +4,7 @@ import { Helmet } from "react-helmet-async";
 import { useInView } from 'react-intersection-observer';
 import exploreBg from '../assets/bg.jpg'; // Using existing bg.jpg as it fits the theme
 import LazyImage from "../components/LazyImage";
-import Error from "../components/Error";
+import ErrorMessage from "../components/Error";
 import Loader from "../components/Loader";
 
 const BackgroundContainer = ({ children }) => (
@@ -29,11 +29,25 @@ export default function Explore() {
   const [page, setPage] = useState(1);
   const [hasMore, setHasMore] = useState(true);
   const [loadingMore, setLoadingMore] = useState(false);
+  const [highlightedBlog, setHighlightedBlog] = useState(null);
   
   const { ref: loadMoreRef, inView: loadMoreInView } = useInView({
     threshold: 0.5,
     delay: 100
   });
+
+  // Check for highlighted blog from admin panel
+  useEffect(() => {
+    const highlightSlug = localStorage.getItem('highlightBlog');
+    if (highlightSlug) {
+      setHighlightedBlog(highlightSlug);
+      // Remove the highlight after 3 seconds
+      setTimeout(() => {
+        setHighlightedBlog(null);
+        localStorage.removeItem('highlightBlog');
+      }, 3000);
+    }
+  }, []);
 
   const fetchBlogs = async (pageNum) => {
     try {
@@ -99,7 +113,7 @@ export default function Explore() {
 
   if (error && blogs.length === 0) {
     return (
-      <Error 
+      <ErrorMessage 
         message={error}
         subMessage="We couldn't load the blogs. Please try again later."
         retry={() => fetchBlogs(1)}
@@ -140,7 +154,11 @@ export default function Explore() {
               {blogs.map((blog) => (
                 <div
                   key={blog._id}
-                  className="bg-white rounded-lg shadow-xl overflow-hidden transition-all duration-300 hover:shadow-2xl hover:-translate-y-1 border border-gray-100"
+                  className={`bg-white rounded-lg shadow-xl overflow-hidden transition-all duration-300 hover:shadow-2xl hover:-translate-y-1 border border-gray-100 ${
+                    highlightedBlog === blog.slug 
+                      ? 'animate-pulse scale-105 shadow-2xl border-blue-300 ring-4 ring-blue-200' 
+                      : ''
+                  }`}
                 >
                   <div className="p-6">
                     <div className="flex items-center justify-between mb-4">
@@ -151,6 +169,11 @@ export default function Explore() {
                           day: 'numeric'
                         })}
                       </span>
+                      {highlightedBlog === blog.slug && (
+                        <span className="text-xs bg-blue-100 text-blue-600 px-2 py-1 rounded-full font-medium">
+                          Admin View
+                        </span>
+                      )}
                     </div>
 
                     <h2 className="text-2xl font-serif font-semibold text-gray-900 mb-3 line-clamp-2">
@@ -180,7 +203,7 @@ export default function Explore() {
 
                     <div className="flex items-center justify-between mt-6 pt-4 border-t border-gray-100">
                       <Link
-                        to={`/blog/${blog.slug}`}
+                        to={`/explore/${blog.slug}`}
                         className="text-blue-600 hover:text-blue-800 font-medium transition-colors duration-200"
                       >
                         Read full story →
@@ -211,7 +234,7 @@ export default function Explore() {
 
           {error && blogs.length > 0 && (
             <div className="mt-8">
-              <Error 
+              <ErrorMessage 
                 message="Couldn't load more blogs"
                 subMessage="Please try again"
                 retry={() => fetchBlogs(page)}
