@@ -18,7 +18,7 @@ export default function Home() {
               You don't need a name to be heard.
             </h1>
             <p className="text-xl max-w-2xl text-center mb-8">
-              Read and share ideas from independent voices, world-class publications, and experts from around the globe.
+              In this sanctuary of anonymity, every whisper finds its echo. Here, stories are not measured by the fame of their teller, but by the truth they carry.
             </p>
             <div className="space-x-4">
               <a
@@ -40,17 +40,17 @@ export default function Home() {
         {/* Featured Section */}
         <div className="max-w-7xl mx-auto px-6 py-20">
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            <div className="space-y-4">
-              <h3 className="font-bold text-xl">Staff Picks</h3>
-              <p className="text-gray-600">Stories selected by our editors, featuring unique perspectives and thoughtful analysis.</p>
+            <div className="bg-white rounded-xl shadow-lg p-8 hover:shadow-xl transition-shadow duration-300">
+              <h3 className="font-bold text-xl mb-4">Whispers from Within</h3>
+              <p className="text-gray-600">Curated stories that resonate with the soul—each one a testament to the courage of anonymous expression and the beauty of unfiltered truth.</p>
             </div>
-            <div className="space-y-4">
-              <h3 className="font-bold text-xl">Member Features</h3>
-              <p className="text-gray-600">Dive deep into expert insights and personal experiences from our community.</p>
+            <div className="bg-white rounded-xl shadow-lg p-8 hover:shadow-xl transition-shadow duration-300">
+              <h3 className="font-bold text-xl mb-4">Voices in the Dark</h3>
+              <p className="text-gray-600">Journey into the depths of human experience through stories that speak to the heart, written by souls who understand the power of vulnerability.</p>
             </div>
-            <div className="space-y-4">
-              <h3 className="font-bold text-xl">Topics that matter</h3>
-              <p className="text-gray-600">Explore stories on culture, science, business, and more from voices that need to be heard.</p>
+            <div className="bg-white rounded-xl shadow-lg p-8 hover:shadow-xl transition-shadow duration-300">
+              <h3 className="font-bold text-xl mb-4">Stories That Matter</h3>
+              <p className="text-gray-600">From the quiet corners of the mind to the universal truths that bind us all, explore narratives that illuminate the human condition in its most authentic form.</p>
             </div>
           </div>
         </div>
