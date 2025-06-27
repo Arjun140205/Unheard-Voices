@@ -45,11 +45,22 @@ module.exports = {
           '50%': {
             opacity: '1'
           }
+        },
+        float: {
+          '0%, 100%': {
+            transform: 'translateY(0px) rotate(0deg)',
+            opacity: '0.7'
+          },
+          '50%': {
+            transform: 'translateY(-8px) rotate(1deg)',
+            opacity: '1'
+          }
         }
       },
       animation: {
         'inkDrop': 'inkDrop 3s cubic-bezier(0.4, 0, 0.2, 1) infinite',
-        'loaderText': 'loaderText 3s ease-in-out infinite'
+        'loaderText': 'loaderText 3s ease-in-out infinite',
+        'float': 'float 4s ease-in-out infinite'
       },
       typography: {
         DEFAULT: {
