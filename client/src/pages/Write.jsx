@@ -6,7 +6,7 @@ import writingBg from "../assets/writing.jpg";
 import ConfirmationModal from "../components/ConfirmationModal";
 import { useNavigate } from "react-router-dom";
 import { Helmet } from "react-helmet-async";
-import Error from "../components/Error";
+import ErrorMessage from "../components/Error";
 
 const Write = () => {
   const [title, setTitle] = useState("");
@@ -71,7 +71,7 @@ const Write = () => {
       }
 
       const data = await response.json();
-      navigate(`/explore/${data.slug}`);
+      navigate(`/explore/${data.blog.slug}`);
     } catch (err) {
       console.error("Error submitting blog:", err);
       setError(err.message || "Failed to submit blog post");
@@ -199,7 +199,7 @@ const Write = () => {
 
             {error && (
               <div className="mb-6">
-                <Error
+                <ErrorMessage
                   message={error}
                   subMessage="Please try again"
                   retry={() => setError(null)}
