@@ -27,7 +27,7 @@ export default function BlogDetails() {
     try {
       setLoading(true);
       setError(null);
-      const res = await fetch(`http://localhost:4000/api/blogs/${slug}`);
+      const res = await fetch(`https://unheard-voices.onrender.com/api/blogs/${slug}`);
       
       if (!res.ok) {
         throw new Error(
@@ -61,7 +61,7 @@ export default function BlogDetails() {
 
   const fetchRecommendations = async () => {
     try {
-      const res = await fetch(`http://localhost:4000/api/blogs/recommend/${slug}`);
+      const res = await fetch(`https://unheard-voices.onrender.com/api/blogs/recommend/${slug}`);
       if (!res.ok) {
         throw new Error("Failed to load recommendations");
       }
@@ -83,7 +83,7 @@ export default function BlogDetails() {
     if (!blog || hasVoted) return;
 
     try {
-      const res = await fetch(`http://localhost:4000/api/blogs/${blog._id}/vote`, {
+      const res = await fetch(`https://unheard-voices.onrender.com/api/blogs/${blog._id}/vote`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ vote: type }),

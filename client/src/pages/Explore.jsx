@@ -58,7 +58,7 @@ export default function Explore() {
         setLoadingMore(true);
       }
 
-      const res = await fetch(`http://localhost:4000/api/blogs?page=${pageNum}&limit=10`);
+      const res = await fetch(`https://unheard-voices.onrender.com/api/blogs?page=${pageNum}&limit=10`);
       
       if (!res.ok) {
         throw new Error(

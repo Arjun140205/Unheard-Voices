@@ -51,7 +51,7 @@ const Write = () => {
       setMessage("");
       setError(null);
 
-      const response = await fetch("http://localhost:4000/api/blogs", {
+      const response = await fetch("https://unheard-voices.onrender.com/api/blogs", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

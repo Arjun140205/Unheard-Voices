@@ -69,8 +69,8 @@ const AdminPortal = () => {
       };
 
       const [blogsRes, analyticsRes] = await Promise.all([
-        fetch('http://localhost:4000/api/admin/blogs', { headers }),
-        fetch('http://localhost:4000/api/admin/analytics', { headers })
+        fetch('https://unheard-voices.onrender.com/api/admin/blogs', { headers }),
+        fetch('https://unheard-voices.onrender.com/api/admin/analytics', { headers })
       ]);
 
       if (!blogsRes.ok || !analyticsRes.ok) {
@@ -102,7 +102,7 @@ const AdminPortal = () => {
     
     try {
       console.log('Attempting login with token:', accessToken);
-      const res = await fetch('http://localhost:4000/api/admin/verify', {
+      const res = await fetch('https://unheard-voices.onrender.com/api/admin/verify', {
         method: 'POST',
         headers: { 
           'Content-Type': 'application/json',
@@ -230,7 +230,7 @@ const AdminPortal = () => {
     if (!window.confirm('Are you sure you want to delete this blog?')) return;
 
     try {
-      const res = await fetch(`http://localhost:4000/api/admin/blogs/${blogId}`, {
+      const res = await fetch(`https://unheard-voices.onrender.com/api/admin/blogs/${blogId}`, {
         method: 'DELETE',
         headers: { adminToken: accessToken },
       });
