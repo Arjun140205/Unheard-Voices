@@ -68,7 +68,7 @@ const BlogForm = () => {
     const blogData = { title, tag, content };
 
     try {
-      const res = await fetch("http://localhost:4000/api/blogs", {
+      const res = await fetch("https://unheard-voices.onrender.com/api/blogs", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

@@ -25,7 +25,7 @@ const Admin = () => {
     setError('');
     setLoading(true);
     try {
-      const res = await fetch('http://localhost:4000/api/admin/verify', {
+      const res = await fetch('https://unheard-voices.onrender.com/api/admin/verify', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ accessToken }),
@@ -48,7 +48,7 @@ const Admin = () => {
 
   const fetchBlogs = async (token) => {
     try {
-      const res = await fetch('http://localhost:4000/api/admin/blogs', {
+      const res = await fetch('https://unheard-voices.onrender.com/api/admin/blogs', {
         headers: { adminToken: token || accessToken },
       });
       const data = await res.json();
@@ -74,7 +74,7 @@ const Admin = () => {
     if (!window.confirm('Are you sure you want to delete this blog?')) return;
     
     try {
-      const res = await fetch(`http://localhost:4000/api/admin/blogs/${blogId}`, {
+      const res = await fetch(`https://unheard-voices.onrender.com/api/admin/blogs/${blogId}`, {
         method: 'DELETE',
         headers: { adminToken: accessToken },
       });
@@ -93,7 +93,7 @@ const Admin = () => {
 
   const toggleBlogFlag = async (blogId, currentFlagStatus) => {
     try {
-      const res = await fetch(`http://localhost:4000/api/admin/blogs/${blogId}/flag`, {
+      const res = await fetch(`https://unheard-voices.onrender.com/api/admin/blogs/${blogId}/flag`, {
         method: 'PATCH',
         headers: {
           'Content-Type': 'application/json',
