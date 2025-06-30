@@ -2,12 +2,6 @@ import React from "react";
 import { Link } from "react-router-dom";
 import aboutBg from "../assets/aboutbg.jpg";
 
-const HERO_IMAGE = "https://images.unsplash.com/photo-1529626455594-4ff0802cfb7e?auto=format&fit=crop&w=1200&q=80"; // fallback if Unsplash is down
-const UNSPLASH_IMAGE = "https://images.unsplash.com/photo-1529626455594-4ff0802cfb7e?auto=format&fit=crop&w=1200&q=80";
-const FLOWER_IMAGE = "https://images.unsplash.com/photo-1529626455594-4ff0802cfb7e?auto=format&fit=crop&w=1200&q=80";
-// Use the Unsplash image from the user
-const BRANCH_IMAGE = "https://images.unsplash.com/photo-1529626455594-4ff0802cfb7e?auto=format&fit=crop&w=1200&q=80";
-
 const About = () => {
   return (
     <div className="w-full min-h-screen bg-[#f9f7f3]">
@@ -15,7 +9,7 @@ const About = () => {
       <section className="relative h-[340px] sm:h-[420px] flex items-center justify-center overflow-hidden">
         <img
           src={aboutBg}
-          alt="White flowering branch - local image"
+          alt="White flowering branch by Anton Darius"
           className="absolute inset-0 w-full h-full object-cover object-center z-0"
           style={{ filter: 'brightness(0.7) blur(0px)' }}
         />
