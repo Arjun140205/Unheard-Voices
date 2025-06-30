@@ -62,7 +62,7 @@ const About = () => {
               </p>
               <Link
                 to="/write"
-                className="inline-block px-5 py-2 border border-rose-200 text-rose-700 hover:bg-rose-50 hover:text-rose-900 transition rounded-full text-sm"
+                className="inline-block px-5 py-2 border border-[#e5ded7] bg-[#f7f4ef] text-[#7c6f5a] hover:bg-[#ede9e3] hover:text-[#5c5343] transition rounded-full text-sm"
               >
                 Start Writing
               </Link>
@@ -75,7 +75,7 @@ const About = () => {
               </p>
               <Link
                 to="/explore"
-                className="inline-block px-5 py-2 border border-rose-200 text-rose-700 hover:bg-rose-50 hover:text-rose-900 transition rounded-full text-sm"
+                className="inline-block px-5 py-2 border border-[#e5ded7] bg-[#f7f4ef] text-[#7c6f5a] hover:bg-[#ede9e3] hover:text-[#5c5343] transition rounded-full text-sm"
               >
                 Start Reading
               </Link>
@@ -100,7 +100,7 @@ const About = () => {
           <h2 className="text-xl font-medium mb-6">When you are ready, we are here to listen.</h2>
           <Link
             to="/write"
-            className="inline-block bg-rose-700 text-white px-10 py-4 text-lg font-semibold rounded-full hover:bg-rose-800 transition"
+            className="inline-block bg-[#f7f4ef] text-[#7c6f5a] border border-[#e5ded7] px-10 py-4 text-lg font-semibold rounded-full hover:bg-[#ede9e3] hover:text-[#5c5343] transition"
           >
             Write Something Real
           </Link>
