@@ -6,7 +6,7 @@ import { recentBlogsCache } from "../utils/cache";
 import LazyImage from "../components/LazyImage";
 import ErrorMessage from "../components/Error";
 import Loader from "../components/Loader";
-
+import exploreHero from '../assets/explorebg.jpg';
 
 export default function BlogDetails() {
   const { slug } = useParams();
@@ -79,6 +79,52 @@ export default function BlogDetails() {
     fetchRecommendations();
   }, [slug]);
 
+  useEffect(() => {
+    // Inject grain and background CSS only once
+    if (!document.getElementById('blogdetails-animations')) {
+      const style = document.createElement('style');
+      style.id = 'blogdetails-animations';
+      style.innerHTML = `
+        .blog-bg {
+          position: fixed;
+          inset: 0;
+          z-index: 0;
+          width: 100vw;
+          height: 100vh;
+          object-fit: cover;
+          filter: brightness(0.7) blur(2px) grayscale(0.1);
+          pointer-events: none;
+        }
+        .blog-grain {
+          position: fixed;
+          inset: 0;
+          z-index: 1;
+          width: 100vw;
+          height: 100vh;
+          pointer-events: none;
+          background-image: url('data:image/svg+xml;utf8,<svg width="400" height="300" xmlns="http://www.w3.org/2000/svg"><filter id="grain"><feTurbulence type="fractalNoise" baseFrequency="0.8" numOctaves="2" stitchTiles="stitch"/></filter><rect width="100%" height="100%" fill="white"/><rect width="100%" height="100%" filter="url(%23grain)" opacity="0.08"/></svg>');
+          background-size: cover;
+          mix-blend-mode: multiply;
+        }
+        .blog-content-art {
+          background: rgba(249, 247, 243, 0.98);
+          border-radius: 2rem;
+          box-shadow: 0 2px 16px 0 rgba(180, 170, 140, 0.07);
+          border: 1.5px solid #e5ded7;
+        }
+        @keyframes drawLine {
+          to { stroke-dashoffset: 0; }
+        }
+        .hand-drawn-line {
+          stroke-dasharray: 800;
+          stroke-dashoffset: 800;
+          animation: drawLine 1.2s cubic-bezier(0.77,0,0.18,1) forwards;
+        }
+      `;
+      document.head.appendChild(style);
+    }
+  }, []);
+
   const handleVote = async (type) => {
     if (!blog || hasVoted) return;
 
@@ -130,20 +176,23 @@ export default function BlogDetails() {
       <Helmet>
         <title>{blog?.title || "Blog Post"} | Unheard Voices</title>
       </Helmet>
-      
-      <div className="w-full max-w-md mx-auto px-2 py-6 sm:px-6 sm:py-10 bg-gradient-to-br from-white to-blue-50/30 rounded-2xl shadow-lg relative mt-6 mb-20 flex flex-col overflow-x-hidden">
-        {/* Back to Explore (inside card, always visible) */}
-        <div className="w-full flex justify-start mb-4">
-          <Link to="/explore" className="text-blue-500 hover:text-blue-700 text-base font-medium bg-white/90 px-4 py-2 rounded-full shadow-sm transition">
+      {/* Artistic background and grain overlays */}
+      <img src={exploreHero} alt="Background" className="blog-bg" />
+      <div className="absolute inset-0 z-10 pointer-events-none" style={{background: 'linear-gradient(to bottom, rgba(255,255,255,0.82), rgba(255,255,255,0.75))', backdropFilter: 'blur(2.5px)'}} />
+      <div className="blog-grain" />
+      <div className="relative z-20 w-full max-w-xl mx-auto px-4 sm:px-6 py-8 blog-content-art mt-10 mb-16 flex flex-col justify-center items-center" style={{ boxSizing: 'border-box', width: '100%' }}>
+        <div className="w-full flex justify-start mb-6">
+          <Link to="/explore" className="text-[#7c6f5a] hover:text-[#5c5343] text-base font-medium bg-[#f7f4ef] px-4 py-2 rounded-full shadow-sm transition">
             ← Back to Explore
           </Link>
         </div>
-        {/* Feather watermark (top right, smaller on mobile) */}
-        <svg className="absolute top-4 right-4 w-10 h-10 sm:w-16 sm:h-16 text-blue-100 opacity-20 pointer-events-none" fill="none" viewBox="0 0 32 32"><path d="M6 28 L10 24 L14 20 L18 16 L22 12 L26 10 L28 12 L26 16 L22 20 L18 24 L14 28 L10 30 L6 28" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round"/></svg>
         <div className="relative z-10 flex flex-col items-center w-full">
-          <span className="text-xs text-gray-400 italic mb-2">{new Date(blog.createdAt).toLocaleDateString()}</span>
-          <h1 className="text-2xl sm:text-4xl font-serif font-bold text-gray-900 mb-3 text-center w-full break-words leading-tight">{blog.title}</h1>
-          <div className="w-10 sm:w-12 border-t border-gray-200 my-4" />
+          <span className="text-xs text-[#b1a89c] italic mb-4 font-serif">{new Date(blog.createdAt).toLocaleDateString()}</span>
+          <h1 className="text-2xl sm:text-4xl md:text-5xl font-serif font-bold text-[#3d372f] mb-2 text-center w-full break-words leading-tight">{blog.title}</h1>
+          {/* Hand-drawn brushstroke accent under the title */}
+          <svg className="w-full h-6 hand-drawn-line mb-6" viewBox="0 0 400 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M0 12 Q100 24 200 12 T400 12" stroke="#e5ded7" strokeWidth="2.5" fill="none" />
+          </svg>
           {blog.image && (
             <LazyImage
               src={blog.image}
@@ -151,7 +200,7 @@ export default function BlogDetails() {
               className="w-full h-auto rounded-lg mb-8"
             />
           )}
-          <div ref={contentRef} className="prose prose-base sm:prose-lg max-w-none text-gray-800 mb-6 leading-relaxed w-full">
+          <div ref={contentRef} className="prose prose-base sm:prose-lg max-w-none text-[#7c6f5a] mb-8 leading-relaxed w-full font-serif text-justify prose-p:my-4 prose-p:text-base sm:prose-p:text-lg">
             {contentInView ? (
               <div dangerouslySetInnerHTML={{ __html: blog.content }} />
             ) : (
@@ -192,6 +241,21 @@ export default function BlogDetails() {
           ))}
         </div>
       </div>
+      <style>{`
+        @media (max-width: 640px) {
+          .blog-content-art {
+            max-width: 100vw;
+            margin-left: auto;
+            margin-right: auto;
+            padding-left: 1rem;
+            padding-right: 1rem;
+            border-radius: 1.2rem;
+          }
+        }
+        .blog-bg {
+          filter: brightness(0.6) blur(8px) grayscale(0.08) !important;
+        }
+      `}</style>
     </>
   );
 }
