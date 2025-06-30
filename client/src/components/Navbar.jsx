@@ -17,6 +17,13 @@ const Navbar = () => {
             <div className="flex-1 flex justify-end">
               <div className="flex flex-nowrap overflow-x-auto whitespace-nowrap gap-1 sm:gap-0 scrollbar-thin scrollbar-thumb-transparent scrollbar-track-transparent hide-scrollbar sm:overflow-x-visible sm:whitespace-normal sm:divide-x sm:divide-[#2c2c2c]/10">
                 <Link 
+                  to="/about" 
+                  className="px-3 sm:px-6 py-1 text-[#2c2c2c]/80 text-sm sm:text-[15px] font-medium tracking-wide hover:text-[#2c2c2c] transition-colors"
+                  style={{ fontFamily: 'EB Garamond' }}
+                >
+                  Our Story
+                </Link>
+                <Link 
                   to="/explore" 
                   className="px-3 sm:px-6 py-1 text-[#2c2c2c]/80 text-sm sm:text-[15px] font-medium tracking-wide hover:text-[#2c2c2c] transition-colors"
                   style={{ fontFamily: 'EB Garamond' }}
@@ -29,13 +36,6 @@ const Navbar = () => {
                   style={{ fontFamily: 'EB Garamond' }}
                 >
                   Write
-                </Link>
-                <Link 
-                  to="/about" 
-                  className="px-3 sm:px-6 py-1 text-[#2c2c2c]/80 text-sm sm:text-[15px] font-medium tracking-wide hover:text-[#2c2c2c] transition-colors"
-                  style={{ fontFamily: 'EB Garamond' }}
-                >
-                  About
                 </Link>
                 <Link 
                   to="/admin-portal" 
