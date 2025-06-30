@@ -200,7 +200,7 @@ export default function BlogDetails() {
               className="w-full h-auto rounded-lg mb-8"
             />
           )}
-          <div ref={contentRef} className="prose prose-base sm:prose-lg max-w-none text-[#7c6f5a] mb-8 leading-relaxed w-full font-serif text-justify prose-p:my-4 prose-p:text-base sm:prose-p:text-lg">
+          <div ref={contentRef} className="prose prose-base sm:prose-lg max-w-none text-[#7c6f5a] mb-8 w-full font-serif text-justify prose-p:my-3 prose-p:text-base sm:prose-p:text-lg prose-p:leading-tight" style={{ lineHeight: 1.5 }}>
             {contentInView ? (
               <div dangerouslySetInnerHTML={{ __html: blog.content }} />
             ) : (
