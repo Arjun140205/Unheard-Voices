@@ -17,7 +17,7 @@ import {
   RadialBar
 } from 'recharts';
 import { Helmet } from "react-helmet-async";
-import adminBg from '../assets/admin.jpg';
+import adminBg from '../assets/adminbg.jpg';
 import { format } from 'date-fns';
 
 // Vibrant, sophisticated color palette
@@ -157,24 +157,25 @@ const AdminPortal = () => {
   // Login Form
   if (!isAuthenticated) {
     return (
-      <div className="relative min-h-screen bg-gray-50">
+      <div className="relative min-h-screen overflow-hidden">
         <Helmet>
           <title>Admin Portal - Unheard Voices</title>
         </Helmet>
         
-        {/* Background Image */}
-        <div 
-          className="absolute inset-0 bg-cover bg-center bg-no-repeat"
-          style={{ 
-            backgroundImage: `url(${adminBg})`,
-            opacity: 0.1
-          }}
-        />
+        {/* Artistic background and overlays */}
+        <img src={adminBg} alt="Background" className="admin-bg absolute inset-0 w-full h-full object-cover object-center z-0" />
+        <div className="absolute inset-0 z-10 pointer-events-none" style={{background: 'linear-gradient(to bottom, rgba(255,255,255,0.82), rgba(255,255,255,0.75))', backdropFilter: 'blur(2.5px)'}} />
+        <div className="admin-grain absolute inset-0 z-20 pointer-events-none" />
 
-        <div className="relative z-10 min-h-screen flex items-center justify-center px-4">
-          <div className="max-w-md w-full bg-white p-8 border border-gray-100">
-            <h2 className="text-3xl font-serif text-gray-800 mb-8 text-center" style={{ fontFamily: 'EB Garamond' }}>
+        <div className="relative z-30 min-h-screen flex items-center justify-center px-4">
+          <div className="max-w-md w-full bg-white/90 p-8 border border-[#e5ded7] rounded-2xl shadow-lg backdrop-blur-md relative overflow-hidden">
+            {/* Artistic brushstroke accent above the card */}
+            <svg className="absolute -top-6 left-1/2 -translate-x-1/2 w-48 h-8 hand-drawn-line" viewBox="0 0 200 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M0 16 Q50 32 100 16 T200 16" stroke="#e5ded7" strokeWidth="2.5" fill="none" />
+            </svg>
+            <h2 className="text-3xl font-serif text-gray-800 mb-8 text-center relative group" style={{ fontFamily: 'EB Garamond' }}>
               Admin Portal
+              <span className="block mx-auto mt-2 w-16 h-1 bg-[#e5ded7] rounded-full group-hover:w-24 transition-all duration-500" style={{ transitionProperty: 'width' }}></span>
             </h2>
             
             {error && (
@@ -247,7 +248,7 @@ const AdminPortal = () => {
   };
 
   return (
-    <div className="relative min-h-screen bg-gray-50">
+    <div className="relative min-h-screen overflow-hidden">
       <Helmet>
         <title>Admin Dashboard - Unheard Voices</title>
       </Helmet>
@@ -577,6 +578,17 @@ const AdminPortal = () => {
           </div>
         )}
       </div>
+
+      <style>{`
+        .admin-bg {
+          filter: brightness(0.7) blur(8px) grayscale(0.08) !important;
+        }
+        .admin-grain {
+          background-image: url('data:image/svg+xml;utf8,<svg width="400" height="300" xmlns="http://www.w3.org/2000/svg"><filter id="grain"><feTurbulence type="fractalNoise" baseFrequency="0.8" numOctaves="2" stitchTiles="stitch"/></filter><rect width="100%" height="100%" fill="white"/><rect width="100%" height="100%" filter="url(%23grain)" opacity="0.08"/></svg>');
+          background-size: cover;
+          mix-blend-mode: multiply;
+        }
+      `}</style>
     </div>
   );
 };
