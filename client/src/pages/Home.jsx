@@ -23,13 +23,13 @@ export default function Home() {
             <div className="flex flex-col items-center sm:flex-row sm:space-x-4 space-y-3 sm:space-y-0 w-full max-w-xs sm:max-w-none mx-auto justify-center mt-4">
               <a
                 href="/explore"
-                className="inline-block max-w-[220px] sm:w-auto bg-white text-[#292929] px-5 py-2 sm:px-8 sm:py-3 rounded-full text-base sm:text-lg font-medium hover:bg-gray-100 transition text-center"
+                className="inline-block max-w-[220px] sm:w-auto bg-white text-[#292929] px-5 py-2 sm:px-8 sm:py-3 rounded-full text-base sm:text-lg font-medium hover:bg-gray-100 transition text-center border-2 border-[#e7c77f] shadow-sm"
               >
                 Start reading
               </a>
               <a
                 href="/write"
-                className="inline-block max-w-[220px] sm:w-auto bg-white text-[#292929] px-5 py-2 sm:px-8 sm:py-3 rounded-full text-base sm:text-lg font-medium hover:bg-gray-100 transition text-center"
+                className="inline-block max-w-[220px] sm:w-auto bg-white text-[#292929] px-5 py-2 sm:px-8 sm:py-3 rounded-full text-base sm:text-lg font-medium hover:bg-gray-100 transition text-center border-2 border-[#e7c77f] shadow-sm"
               >
                 Start writing
               </a>
