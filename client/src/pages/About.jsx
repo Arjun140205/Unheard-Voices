@@ -25,7 +25,7 @@ const About = () => {
             The most meaningful stories are often the ones we whisper to ourselves
           </h1>
           <p className="text-lg sm:text-xl text-white text-center max-w-2xl drop-shadow-md">
-            Welcome to a gentle space where every word is cherished.
+            Welcome to a thoughtful space where every word is valued and quiet feelings find their voice.
           </p>
         </div>
       </section>
@@ -36,11 +36,10 @@ const About = () => {
         <section className="bg-white/90 rounded-2xl shadow-lg p-8 mb-10">
           <h2 className="text-2xl font-serif font-semibold mb-4">What is Unheard Voices?</h2>
           <p className="mb-4">
-            Unheard Voices is more than a platform—it is a sanctuary for the thoughts we hold close, a home for feelings that deserve to be heard.
+            Unheard Voices is not merely a platform; it is a meeting place for unspoken thoughts and honest expression. Here, you are invited to set aside the need for perfection and simply share what is real, in your own words and in your own time.
           </p>
           <p>
-            Here, your story is not measured by numbers or trends.<br />
-            It is valued for its honesty, its courage, and its heart.
+            Within these digital walls, your story is liberated from the tyranny of numbers and trends. It is celebrated for its honesty, its quiet courage, and the sincerity of its heart. We believe that every voice, no matter how soft, deserves to be heard and cherished.
           </p>
         </section>
 
@@ -57,10 +56,9 @@ const About = () => {
           <div className="grid md:grid-cols-2 gap-8">
             {/* Writers Card */}
             <div className="bg-white border border-rose-100 rounded-lg p-6 text-center shadow-sm">
-              <h3 className="text-xl font-serif font-bold mb-2">Writers</h3>
+              <h3 className="text-xl font-serif font-bold mb-2">For Writers</h3>
               <p className="mb-4">
-                Let your words spill—messy, honest, unfinished.<br />
-                Here, vulnerability is not a flaw; it is a gift.
+                Let your thoughts wander without worry or expectation. Your words matter, whether they are polished or raw. This is a gentle place where your story is welcome, just as it is.
               </p>
               <Link
                 to="/write"
@@ -71,10 +69,9 @@ const About = () => {
             </div>
             {/* Readers Card */}
             <div className="bg-white border border-rose-100 rounded-lg p-6 text-center shadow-sm">
-              <h3 className="text-xl font-serif font-bold mb-2">Readers</h3>
+              <h3 className="text-xl font-serif font-bold mb-2">For Readers</h3>
               <p className="mb-4">
-                Discover what is rarely spoken aloud.<br />
-                Real moments. Quiet confessions. Souls on the page.
+                Discover stories shared with trust and honesty. Every story, no matter how simple or unfinished, has meaning. Let these words find a quiet place in your own heart.
               </p>
               <Link
                 to="/explore"
@@ -90,11 +87,11 @@ const About = () => {
         <section className="bg-white/90 rounded-2xl shadow p-8 mb-10">
           <h2 className="text-2xl font-serif font-semibold mb-4">Our Promise</h2>
           <p className="mb-2">
-            We do not follow your clicks, sell your story, or chase what's popular.<br />
+            We do not track your clicks, sell your story, or chase what is popular.<br />
             We are here for what is real, for what matters.
           </p>
           <p>
-            If your heart needs to speak, or simply to be, you are welcome here.
+            If your heart needs to speak, or simply to rest, you are always welcome here.
           </p>
         </section>
 
