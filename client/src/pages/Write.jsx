@@ -1,22 +1,39 @@
-import React, { useState } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { useEditor, EditorContent } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
-import axios from "axios";
 import writingBg from "../assets/writing.jpg";
 import ConfirmationModal from "../components/ConfirmationModal";
 import { useNavigate } from "react-router-dom";
 import { Helmet } from "react-helmet-async";
 import ErrorMessage from "../components/Error";
 
+const DRAFT_KEY = 'unheardvoices_write_draft';
+
 const Write = () => {
   const [title, setTitle] = useState("");
-  const [tags, setTags] = useState(""); // NEW: for tag input
+  const [tags, setTags] = useState("");
   const [isDark, setIsDark] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [message, setMessage] = useState("");
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [error, setError] = useState(null);
   const navigate = useNavigate();
+
+  // Store draft in a ref to avoid using editor before it's ready
+  const draftRef = useRef(null);
+
+  // Load draft on mount (just store in ref/state)
+  useEffect(() => {
+    const draft = localStorage.getItem(DRAFT_KEY);
+    if (draft) {
+      try {
+        const { title, tags, content } = JSON.parse(draft);
+        setTitle(title || "");
+        setTags(tags || "");
+        draftRef.current = content || "";
+      } catch {}
+    }
+  }, []);
 
   const editor = useEditor({
     extensions: [StarterKit],
@@ -26,14 +43,36 @@ const Write = () => {
       attributes: {
         class:
           "prose prose-lg focus:outline-none mx-auto min-h-[300px] prose-headings:text-inherit prose-p:text-inherit",
+        spellCheck: 'true',
       },
     },
   });
+
+  // Set editor content from draft only after editor is ready
+  useEffect(() => {
+    if (editor && draftRef.current) {
+      editor.commands.setContent(draftRef.current);
+      draftRef.current = null; // Only set once
+    }
+  }, [editor]);
+
+  // Save draft on change (fix dependencies)
+  useEffect(() => {
+    if (!editor) return;
+    const saveDraft = () => {
+      const content = editor.getHTML();
+      localStorage.setItem(DRAFT_KEY, JSON.stringify({ title, tags, content }));
+    };
+    saveDraft(); // Save immediately on mount or title/tags change
+    editor.on('update', saveDraft);
+    return () => editor.off('update', saveDraft);
+  }, [title, tags, editor]);
 
   const handleShareClick = (e) => {
     e.preventDefault();
     if (!title.trim() || !editor) return;
     setIsModalOpen(true);
+    localStorage.removeItem(DRAFT_KEY);
   };
 
   const handleConfirm = async () => {
@@ -91,7 +130,7 @@ const Write = () => {
       </Helmet>
 
       <div
-        className="min-h-screen py-16 px-6"
+        className="min-h-screen py-16 px-6 relative"
         style={{
           backgroundImage: `url(${writingBg})`,
           backgroundSize: "cover",
@@ -99,11 +138,13 @@ const Write = () => {
           backgroundRepeat: "no-repeat",
         }}
       >
-        <div className="max-w-xl mx-auto">
+        {/* Subtle frosted overlay for the entire background */}
+        <div className="absolute inset-0 bg-white/10 backdrop-blur-sm pointer-events-none z-0" />
+        <div className="max-w-xl mx-auto px-4 sm:px-8 md:px-0 mt-16 sm:mt-20 md:mt-2 mb-8 relative z-10">
           <form onSubmit={handleShareClick} className="space-y-4">
             <div className="notepad-container backdrop-blur-md ">
               <div
-                className={`secret-note mac-note p-6 relative transition-all duration-300 ${
+                className={`secret-note mac-note p-6 relative transition-all duration-300 shadow-2xl ${
                   isDark
                     ? "dark-mode text-gray-100 bg-gray-900/90"
                     : "light-mode text-gray-900 bg-white/90"
@@ -152,6 +193,7 @@ const Write = () => {
                     <EditorContent
                       editor={editor}
                       className="min-h-[300px] font-serif text-lg leading-[30px] focus:outline-none pt-[2px]"
+                      spellCheck={true}
                     />
                   </div>
 
@@ -174,16 +216,10 @@ const Write = () => {
             <div className="flex justify-center mt-8">
               <button
                 type="submit"
+                className="mt-4 rounded-full px-8 py-2 font-medium bg-white/30 backdrop-blur-sm border-2 border-[#e3d6c6] shadow-2xl glass-inner-shadow transition-all duration-200 text-[#7c6f5a] hover:bg-[#f7e6ee]/80 hover:text-[#5c5343] focus:outline-none"
                 disabled={isSubmitting}
-                className={`story-btn group relative px-8 py-3 rounded-2xl transform transition-all duration-300 ease-in-out font-medium text-base hover:-translate-y-0.5 overflow-hidden backdrop-blur-md ${
-                  isDark
-                    ? "bg-white/90 text-gray-900"
-                    : "bg-gray-900/90 text-white"
-                }`}
               >
-                <span className="relative z-10">
-                  {isSubmitting ? "Sharing..." : "Share Your Story"}
-                </span>
+                {isSubmitting ? "Sharing..." : "Share your story"}
               </button>
             </div>
 
