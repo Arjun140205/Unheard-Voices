@@ -101,6 +101,32 @@ export default function Explore() {
     }
   }, [loadMoreInView, hasMore, loading, loadingMore, error]);
 
+  useEffect(() => {
+    // Inject animation CSS only once
+    if (!document.getElementById('explore-animations')) {
+      const style = document.createElement('style');
+      style.id = 'explore-animations';
+      style.innerHTML = `
+        @keyframes drawLine {
+          to { stroke-dashoffset: 0; }
+        }
+        .hand-drawn-line {
+          stroke-dasharray: 800;
+          stroke-dashoffset: 800;
+          animation: drawLine 1.2s cubic-bezier(0.77,0,0.18,1) forwards;
+        }
+        @keyframes fadeInUp {
+          from { opacity: 0; transform: translateY(24px); }
+          to { opacity: 1; transform: translateY(0); }
+        }
+        .animate-fadeInUp {
+          animation: fadeInUp 0.7s cubic-bezier(0.77,0,0.18,1) both;
+        }
+      `;
+      document.head.appendChild(style);
+    }
+  }, []);
+
   if (error && blogs.length === 0) {
     return (
       <ErrorMessage 
@@ -154,53 +180,51 @@ export default function Explore() {
               {blogs.map((blog) => (
                 <div
                   key={blog._id}
-                  className={`group relative bg-[#FAF6F2] border border-rose-100 rounded-xl shadow transition-all duration-200 hover:shadow-xl hover:border-rose-200 hover:scale-[1.03] overflow-hidden ${
-                    highlightedBlog === blog.slug ? 'ring-2 ring-rose-200 scale-105' : ''
+                  className={`group relative bg-[#f9f7f3] border border-[#e5ded7] rounded-3xl shadow-md transition-all duration-200 hover:shadow-lg hover:border-[#cfc7b8] hover:scale-[1.015] overflow-hidden animate-fadeInUp ${
+                    highlightedBlog === blog.slug ? 'ring-2 ring-[#e5ded7] scale-105' : ''
                   }`}
+                  style={{ 
+                    boxShadow: '0 2px 16px 0 rgba(180, 170, 140, 0.07)',
+                    backgroundImage: `url('data:image/svg+xml;utf8,<svg width="400" height="300" xmlns="http://www.w3.org/2000/svg"><filter id="grain"><feTurbulence type="fractalNoise" baseFrequency="0.8" numOctaves="2" stitchTiles="stitch"/></filter><rect width="100%" height="100%" fill="white"/><rect width="100%" height="100%" filter="url(%23grain)" opacity="0.08"/></svg>')`,
+                    backgroundSize: 'cover',
+                  }}
                 >
-                  {/* Vertical accent */}
-                  <div className="absolute left-0 top-0 h-full w-1 bg-rose-100 rounded-tr-xl rounded-br-xl" />
-                  {/* Feather watermark */}
-                  <svg className="absolute bottom-3 right-3 w-8 h-8 text-rose-50 opacity-60 pointer-events-none" fill="none" viewBox="0 0 32 32"><path d="M6 28 L10 24 L14 20 L18 16 L22 12 L26 10 L28 12 L26 16 L22 20 L18 24 L14 28 L10 30 L6 28" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round"/></svg>
-                  <div className="p-7 pl-6 flex flex-col min-h-[220px]">
-                    <span className="text-xs text-gray-400 italic mb-2">{new Date(blog.createdAt).toLocaleDateString()}</span>
+                  {/* Animated hand-drawn brushstroke accent at the top */}
+                  <svg className="absolute top-0 left-0 w-full h-6 hand-drawn-line" viewBox="0 0 400 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M0 12 Q100 24 200 12 T400 12" stroke="#e5ded7" strokeWidth="2.5" fill="none" />
+                  </svg>
+                  <div className="p-8 flex flex-col min-h-[200px]">
+                    <span className="text-xs text-[#b1a89c] italic mb-2 font-serif">{new Date(blog.createdAt).toLocaleDateString()}</span>
                     <Link to={`/explore/${blog.slug}`}
-                      className="text-2xl font-serif font-bold text-gray-900 mb-1 group-hover:underline transition-all duration-200 line-clamp-2"
+                      className="text-2xl font-serif font-bold text-[#3d372f] mb-3 group-hover:underline transition-all duration-200 line-clamp-2"
                     >
                       {blog.title}
                     </Link>
-                    {/* Divider */}
-                    <div className="w-8 border-t border-rose-100 my-2" />
-                    <div className="text-gray-600 text-base italic mb-3 line-clamp-2 relative">
+                    <div className="text-[#7c6f5a] text-base mb-6 font-serif line-clamp-3">
                       <div
                         dangerouslySetInnerHTML={{
                           __html: blog.content.substring(0, 120) + "..."
                         }}
                       />
-                      {/* Fade-out effect */}
-                      <div className="absolute bottom-0 left-0 w-full h-6 bg-gradient-to-t from-rose-50/80 to-transparent pointer-events-none" />
                     </div>
-                    <div className="flex flex-wrap gap-2 mb-2">
+                    <div className="flex flex-wrap gap-2 mt-auto mb-4">
                       {blog.tags && blog.tags.length > 0 && blog.tags.map((tag, index) => (
                         <span
                           key={index}
-                          className="px-3 py-1 text-xs bg-rose-50 text-rose-400 rounded-full font-medium"
+                          className="px-3 py-1 text-xs bg-[#f7f4ef] text-[#a89c8a] rounded-full font-medium font-serif"
                         >
                           {tag}
                         </span>
                       ))}
                     </div>
-                    <Link
-                      to={`/explore/${blog.slug}`}
-                      className="absolute right-7 bottom-7 opacity-0 group-hover:opacity-100 text-rose-400 hover:text-rose-600 text-sm font-medium transition-opacity duration-200"
-                    >
-                      Read →
-                    </Link>
-                    {highlightedBlog === blog.slug && (
-                      <span className="absolute top-3 right-3 text-xs bg-rose-50 text-rose-400 px-2 py-1 rounded-full font-medium">
-                        Admin View
-                      </span>
-                    )}
+                    <div className="flex justify-end">
+                      <Link
+                        to={`/explore/${blog.slug}`}
+                        className="px-5 py-2 text-sm font-serif rounded-full bg-[#ede9e3] text-[#7c6f5a] border border-[#e5ded7] shadow-sm hover:bg-[#e5ded7] hover:text-[#3d372f] transition"
+                      >
+                        Read →
+                      </Link>
+                    </div>
                   </div>
                 </div>
               ))}
