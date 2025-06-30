@@ -21,8 +21,8 @@ const About = () => {
         />
         <div className="absolute inset-0 bg-gradient-to-b from-black/40 to-black/10 z-10" />
         <div className="relative z-20 flex flex-col items-center justify-center w-full px-4">
-          <h1 className="text-3xl sm:text-5xl font-serif font-bold text-white text-center drop-shadow-lg mb-4">
-            Some voices are not meant to linger in silence.
+          <h1 className="text-2xl sm:text-4xl font-serif font-bold text-white text-center drop-shadow-lg mb-4">
+            The most meaningful stories are often the ones we whisper to ourselves
           </h1>
           <p className="text-lg sm:text-xl text-white text-center max-w-2xl drop-shadow-md">
             Welcome to a gentle space where every word is cherished.
@@ -45,21 +45,11 @@ const About = () => {
         </section>
 
         {/* Normal Section */}
-        <section className="my-8">
+        {/* <section className="my-8">
           <blockquote className="border-l-4 border-rose-200 pl-6 text-gray-700 italic text-lg font-serif bg-rose-50 py-4 rounded">
             "The most meaningful stories are often the ones we whisper to ourselves."
           </blockquote>
-        </section>
-
-        {/* Boxed Section */}
-        <section className="bg-[#FAF6F2] rounded-2xl shadow p-8 mb-10">
-          <h2 className="text-2xl font-serif font-semibold mb-4">How It Works</h2>
-          <ul className="list-disc list-inside space-y-2 text-gray-800">
-            <li>Write freely, without expectation or audience.</li>
-            <li>Read slowly, savoring each unfiltered moment.</li>
-            <li>Connect through shared truth, not performance.</li>
-          </ul>
-        </section>
+        </section> */}
 
         {/* Normal Section */}
         <section className="mb-10">
