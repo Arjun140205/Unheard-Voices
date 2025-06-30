@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import { Helmet } from "react-helmet-async";
 import { useInView } from 'react-intersection-observer';
 import exploreBg from '../assets/bg.jpg'; // Using existing bg.jpg as it fits the theme
-import LazyImage from "../components/LazyImage";
+import exploreHero from '../assets/explorebg.jpg';
 import ErrorMessage from "../components/Error";
 import Loader from "../components/Loader";
 
@@ -101,16 +101,6 @@ export default function Explore() {
     }
   }, [loadMoreInView, hasMore, loading, loadingMore, error]);
 
-  const handleCopy = (html) => {
-    const tempElement = document.createElement("div");
-    tempElement.innerHTML = html;
-    const plainText = tempElement.textContent || tempElement.innerText;
-
-    navigator.clipboard.writeText(plainText).then(() => {
-      alert("Content copied to clipboard!");
-    });
-  };
-
   if (error && blogs.length === 0) {
     return (
       <ErrorMessage 
@@ -131,17 +121,27 @@ export default function Explore() {
         />
       </Helmet>
 
-      <div className="min-h-screen py-12 px-4 sm:px-6 lg:px-8">
-        <div className="max-w-7xl mx-auto">
-          <div className="text-center mb-12">
-            <h1 className="text-5xl font-serif font-bold text-gray-900 mb-4">
-              Explore Stories
-            </h1>
-            <p className="text-xl text-gray-600 italic font-serif">
-              Every voice deserves to be heard, every story matters
-            </p>
-          </div>
+      {/* Hero Section */}
+      <section className="relative h-[260px] sm:h-[340px] flex items-center justify-center overflow-hidden">
+        <img
+          src={exploreHero}
+          alt="Explore background"
+          className="absolute inset-0 w-full h-full object-cover object-center z-0"
+          style={{ filter: 'brightness(0.7) blur(0px)' }}
+        />
+        <div className="absolute inset-0 bg-gradient-to-b from-black/40 to-black/10 z-10" />
+        <div className="relative z-20 flex flex-col items-center justify-center w-full px-4">
+          <h1 className="text-3xl sm:text-5xl font-serif font-bold text-white text-center drop-shadow-lg mb-3">
+            Discover Stories, Find Yourself
+          </h1>
+          <p className="text-lg sm:text-xl text-white text-center max-w-2xl drop-shadow-md">
+            Step into a world of anonymous voices and heartfelt confessions. Every story is a window into another soul.
+          </p>
+        </div>
+      </section>
 
+      <div className="min-h-screen py-0 px-4 sm:px-6 lg:px-8">
+        <div className="max-w-7xl mx-auto pt-8 pb-16">
           {blogs.length === 0 ? (
             <div className="text-center py-12">
               <p className="text-xl text-gray-600 italic">No stories published yet.</p>
