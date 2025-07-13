@@ -1,80 +1,71 @@
-import { useEffect, useState, Suspense } from "react";
+import { useEffect, useState } from "react";
 import { useParams, Link } from "react-router-dom";
 import { Helmet } from "react-helmet-async";
 import { useInView } from 'react-intersection-observer';
 import { recentBlogsCache } from "../utils/cache";
 import LazyImage from "../components/LazyImage";
 import ErrorMessage from "../components/Error";
-import Loader from "../components/Loader";
 import exploreHero from '../assets/explorebg.jpg';
 
 export default function BlogDetails() {
   const { slug } = useParams();
   const [blog, setBlog] = useState(null);
-  const [hasVoted, setHasVoted] = useState(false);
-  const [voteCounts, setVoteCounts] = useState({ yes: 0, no: 0 });
   const [recommendations, setRecommendations] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const [showFullContent, setShowFullContent] = useState(false);
   
   const { ref: contentRef, inView: contentInView } = useInView({
     triggerOnce: true,
     threshold: 0.1
   });
 
-  const fetchBlog = async () => {
-    try {
-      setLoading(true);
-      setError(null);
-      const res = await fetch(`https://unheard-voices.onrender.com/api/blogs/${slug}`);
-      
-      if (!res.ok) {
-        throw new Error(
-          res.status === 404 
-            ? "Blog post not found" 
-            : "Failed to load blog post"
-        );
-      }
-      
-      const data = await res.json();
-      setBlog(data);
-      setVoteCounts({ yes: data.poll?.yes || 0, no: data.poll?.no || 0 });
-
-      if (data) {
-        recentBlogsCache.add({
-          slug: data.slug,
-          title: data.title,
-          content: data.content.slice(0, 200)
-        });
-      }
-
-      const voted = localStorage.getItem(`voted_${data._id}`);
-      setHasVoted(!!voted);
-    } catch (err) {
-      console.error("Failed to load blog", err);
-      setError(err.message || "Failed to load blog post");
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const fetchRecommendations = async () => {
-    try {
-      const res = await fetch(`https://unheard-voices.onrender.com/api/blogs/recommend/${slug}`);
-      if (!res.ok) {
-        throw new Error("Failed to load recommendations");
-      }
-      const data = await res.json();
-      setRecommendations(data);
-    } catch (err) {
-      console.error("Failed to fetch recommendations", err);
-      // Don't show error UI for recommendations failure
-      setRecommendations([]);
-    }
-  };
-
   useEffect(() => {
+    const fetchBlog = async () => {
+      try {
+        setLoading(true);
+        setError(null);
+        const res = await fetch(`https://unheard-voices.onrender.com/api/blogs/${slug}`);
+        
+        if (!res.ok) {
+          throw new Error(
+            res.status === 404 
+              ? "Blog post not found" 
+              : "Failed to load blog post"
+          );
+        }
+        
+        const data = await res.json();
+        setBlog(data);
+
+        if (data) {
+          recentBlogsCache.add({
+            slug: data.slug,
+            title: data.title,
+            content: data.content.slice(0, 200)
+          });
+        }
+      } catch (err) {
+        console.error("Failed to load blog", err);
+        setError(err.message || "Failed to load blog post");
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    const fetchRecommendations = async () => {
+      try {
+        const res = await fetch(`https://unheard-voices.onrender.com/api/blogs/recommend/${slug}`);
+        if (!res.ok) {
+          throw new Error("Failed to load recommendations");
+        }
+        const data = await res.json();
+        setRecommendations(data);
+      } catch (err) {
+        console.error("Failed to fetch recommendations", err);
+        setRecommendations([]);
+      }
+    };
+
     fetchBlog();
     fetchRecommendations();
   }, [slug]);
@@ -125,31 +116,6 @@ export default function BlogDetails() {
     }
   }, []);
 
-  const handleVote = async (type) => {
-    if (!blog || hasVoted) return;
-
-    try {
-      const res = await fetch(`https://unheard-voices.onrender.com/api/blogs/${blog._id}/vote`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ vote: type }),
-      });
-
-      if (res.ok) {
-        const updated = { ...voteCounts, [type]: voteCounts[type] + 1 };
-        setVoteCounts(updated);
-        setHasVoted(true);
-        localStorage.setItem(`voted_${blog._id}`, true);
-      }
-    } catch (err) {
-      console.error("Voting failed", err);
-    }
-  };
-
-  const totalVotes = voteCounts.yes + voteCounts.no;
-  const yesPercent = totalVotes ? Math.round((voteCounts.yes / totalVotes) * 100) : 0;
-  const noPercent = totalVotes ? 100 - yesPercent : 0;
-
   if (loading) {
     return <div className="text-white text-center mt-10">Loading...</div>;
   }
@@ -164,12 +130,15 @@ export default function BlogDetails() {
         message={error}
         subMessage="Please try again later"
         retry={() => {
-          fetchBlog();
-          fetchRecommendations();
+          // fetchBlog(); // This line was removed as per the edit hint
+          // fetchRecommendations(); // This line was removed as per the edit hint
         }}
       />
     );
   }
+
+  // Remove yesPercent since it's not used
+  // const totalVotes = voteCounts.yes + voteCounts.no;
 
   return (
     <>
@@ -189,6 +158,7 @@ export default function BlogDetails() {
         <div className="relative z-10 flex flex-col items-center w-full">
           <span className="text-xs text-[#b1a89c] italic mb-4 font-serif">{new Date(blog.createdAt).toLocaleDateString()}</span>
           <h1 className="text-2xl sm:text-4xl md:text-5xl font-serif font-bold text-[#3d372f] mb-2 text-center w-full break-words leading-tight">{blog.title}</h1>
+          
           {/* Hand-drawn brushstroke accent under the title */}
           <svg className="w-full h-6 hand-drawn-line mb-6" viewBox="0 0 400 24" fill="none" xmlns="http://www.w3.org/2000/svg">
             <path d="M0 12 Q100 24 200 12 T400 12" stroke="#e5ded7" strokeWidth="2.5" fill="none" />
