@@ -24,7 +24,7 @@ const getLoadingMessage = (pathname) => {
 const Loader = ({ fullScreen = false, customMessage }) => {
   const location = useLocation();
   const message = customMessage || getLoadingMessage(location.pathname);
-
+  
   const loaderContent = (
     <div className="flex flex-col items-center justify-center w-full h-full">
       {/* Feather SVG with gentle floating animation */}
@@ -66,7 +66,7 @@ const Loader = ({ fullScreen = false, customMessage }) => {
 
       {/* Loading message */}
       <div className="text-gray-600 text-lg font-serif tracking-wide animate-pulse">
-        {message}
+          {message}
       </div>
     </div>
   );
