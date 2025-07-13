@@ -17,7 +17,7 @@ const About = () => {
         <div className="relative z-20 flex flex-col items-center justify-center w-full px-4">
           <h1 className="text-2xl sm:text-4xl font-serif font-bold text-white text-center drop-shadow-lg mb-4">
             The most meaningful stories are often the ones we whisper to ourselves
-          </h1>
+        </h1>
           <p className="text-lg sm:text-xl text-white text-center max-w-2xl drop-shadow-md">
             Welcome to a thoughtful space where every word is valued and quiet feelings find their voice.
           </p>
@@ -53,28 +53,28 @@ const About = () => {
               <h3 className="text-xl font-serif font-bold mb-2">For Writers</h3>
               <p className="mb-4">
                 Let your thoughts wander without worry or expectation. Your words matter, whether they are polished or raw. This is a gentle place where your story is welcome, just as it is.
-              </p>
-              <Link
-                to="/write"
+            </p>
+            <Link
+              to="/write"
                 className="inline-block px-5 py-2 border border-[#e5ded7] bg-[#f7f4ef] text-[#7c6f5a] hover:bg-[#ede9e3] hover:text-[#5c5343] transition rounded-full text-sm"
-              >
-                Start Writing
-              </Link>
-            </div>
+            >
+              Start Writing
+            </Link>
+          </div>
             {/* Readers Card */}
             <div className="bg-white border border-rose-100 rounded-lg p-6 text-center shadow-sm">
               <h3 className="text-xl font-serif font-bold mb-2">For Readers</h3>
               <p className="mb-4">
                 Discover stories shared with trust and honesty. Every story, no matter how simple or unfinished, has meaning. Let these words find a quiet place in your own heart.
-              </p>
-              <Link
-                to="/explore"
+            </p>
+            <Link
+              to="/explore"
                 className="inline-block px-5 py-2 border border-[#e5ded7] bg-[#f7f4ef] text-[#7c6f5a] hover:bg-[#ede9e3] hover:text-[#5c5343] transition rounded-full text-sm"
-              >
-                Start Reading
-              </Link>
-            </div>
+            >
+              Start Reading
+            </Link>
           </div>
+        </div>
         </section>
 
         {/* Boxed Section */}
@@ -83,8 +83,8 @@ const About = () => {
           <p className="mb-2">
             We do not track your clicks, sell your story, or chase what is popular.<br />
             We are here for what is real, for what matters.
-          </p>
-          <p>
+        </p>
+        <p>
             If your heart needs to speak, or simply to rest, you are always welcome here.
           </p>
         </section>
@@ -98,8 +98,8 @@ const About = () => {
           >
             Write Something Real
           </Link>
-        </section>
-      </article>
+      </section>
+    </article>
     </div>
   );
 };
