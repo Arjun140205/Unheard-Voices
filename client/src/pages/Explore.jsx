@@ -159,11 +159,11 @@ export default function Explore() {
         <div className="relative z-20 flex flex-col items-center justify-center w-full px-4">
           <h1 className="text-3xl sm:text-5xl font-serif font-bold text-white text-center drop-shadow-lg mb-3">
             Discover Stories, Find Yourself
-          </h1>
+            </h1>
           <p className="text-lg sm:text-xl text-white text-center max-w-2xl drop-shadow-md">
             Step into a world of anonymous voices and heartfelt confessions. Every story is a window into another soul.
-          </p>
-        </div>
+            </p>
+          </div>
       </section>
 
       <div className="min-h-screen py-0 px-4 sm:px-6 lg:px-8">
