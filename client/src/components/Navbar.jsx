@@ -23,27 +23,27 @@ const Navbar = () => {
                 >
                   Our Story
                 </Link>
-                <Link 
-                  to="/explore" 
+              <Link 
+                to="/explore" 
                   className="px-3 sm:px-6 py-1 text-[#2c2c2c]/80 text-sm sm:text-[15px] font-medium tracking-wide hover:text-[#2c2c2c] transition-colors"
-                  style={{ fontFamily: 'EB Garamond' }}
-                >
-                  Explore
-                </Link>
-                <Link 
-                  to="/write" 
+                style={{ fontFamily: 'EB Garamond' }}
+              >
+                Explore
+              </Link>
+              <Link 
+                to="/write" 
                   className="px-3 sm:px-6 py-1 text-[#2c2c2c]/80 text-sm sm:text-[15px] font-medium tracking-wide hover:text-[#2c2c2c] transition-colors"
-                  style={{ fontFamily: 'EB Garamond' }}
-                >
-                  Write
-                </Link>
-                <Link 
-                  to="/admin-portal" 
+                style={{ fontFamily: 'EB Garamond' }}
+              >
+                Write
+              </Link>
+              <Link 
+                to="/admin-portal" 
                   className="pl-3 sm:pl-6 py-1 text-[#2c2c2c]/50 text-sm sm:text-[15px] font-medium tracking-wide hover:text-[#2c2c2c]/80 transition-colors"
-                  style={{ fontFamily: 'EB Garamond' }}
-                >
-                  For Admins
-                </Link>
+                style={{ fontFamily: 'EB Garamond' }}
+              >
+                For Admins
+              </Link>
               </div>
             </div>
           </div>
