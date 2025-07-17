@@ -8,7 +8,7 @@
 -->
 
 <div align="center">
-  <img src="https://images.unsplash.com/photo-1462275646964-a0e3386b89fa?auto=format&fit=crop&q=80&w=1200" alt="Unheard Voices Banner" style="width:100%; border-radius: 16px; box-shadow: 0 8px 32px rgba(0,0,0,0.25); margin-bottom: 2rem;" />
+  <img src="client/public/homeimg.png" alt="Unheard Voices Home Banner" style="width:100%; border-radius: 16px; box-shadow: 0 8px 32px rgba(0,0,0,0.25); margin-bottom: 2rem;" />
 
   <h1 style="font-family:EB Garamond,serif; font-size:2.5rem; letter-spacing:2px; color:#2c2c2c;">Unheard Voices</h1>
   <p><em>A meeting place for unspoken thoughts and honest expression.</em></p>
@@ -26,12 +26,20 @@ Unheard Voices is not merely a platform; it is a haven for the stories we carry 
 
 Within these digital walls, every voice—no matter how soft—is heard and cherished. This is a gentle place where your story is welcome, just as it is.
 
+<div align="center">
+  <img src="client/public/exploreimg.png" alt="Explore Stories" style="width:60%; border-radius: 12px; box-shadow: 0 4px 16px rgba(0,0,0,0.12); margin: 2rem 0;" />
+</div>
+
 ---
 
 ## Who is this for?
 
 **For Writers:**
 > Let your thoughts wander without worry or expectation. Your words matter, whether they are polished or raw. This is a gentle place where your story is welcome, just as it is.
+
+<div align="center">
+  <img src="client/public/writeimg.png" alt="Write Your Story" style="width:60%; border-radius: 12px; box-shadow: 0 4px 16px rgba(0,0,0,0.12); margin: 2rem 0;" />
+</div>
 
 **For Readers:**
 > Discover stories shared with trust and honesty. Every story, no matter how simple or unfinished, has meaning. Let these words find a quiet place in your own heart.
@@ -75,10 +83,6 @@ Within these digital walls, every voice—no matter how soft—is heard and cher
 > We are here to listen. Whether your heart needs to speak, or simply to rest, you are always welcome here.
 
 ---
-
-<div align="center">
-  <img src="https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?auto=format&fit=crop&q=80&w=800" alt="Soft Paper Texture" style="width:60%; border-radius: 12px; box-shadow: 0 4px 16px rgba(0,0,0,0.12); margin: 2rem 0;" />
-</div>
 
 <p align="center" style="color:#b1a89c; font-size:1.1rem; margin-top:2rem;">
   <i>Unheard Voices is a labor of care. Add your voice to the quiet chorus.</i>
