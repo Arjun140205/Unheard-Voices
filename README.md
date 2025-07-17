@@ -16,9 +16,6 @@
 
 ---
 
-> The most meaningful stories are often the ones we whisper to ourselves.
-
----
 
 ## A Sanctuary for the Seldom Spoken
 
@@ -52,7 +49,6 @@ If you seek connection, comprehension, or simply a moment’s respite from the r
 - **No Surveillance, No Subterfuge:** We eschew analytics, eschew commodification, and abjure the pursuit of virality.
 - **Gentle Stewardship:** Moderation is exercised with a velvet glove—firm yet compassionate—to preserve the sanctity of this space.
 
-> Should your heart yearn to speak, or simply to repose, you shall find sanctuary here.
 
 ---
 
