@@ -16,7 +16,7 @@
 
 ---
 
-> "The most meaningful stories are often the ones we whisper to ourselves."
+> The most meaningful stories are often the ones we whisper to ourselves.
 
 ---
 
