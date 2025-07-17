@@ -11,7 +11,7 @@
   <img src="client/public/homeimg.png" alt="Unheard Voices Home Banner" style="width:100%; border-radius: 16px; box-shadow: 0 8px 32px rgba(0,0,0,0.25); margin-bottom: 2rem;" />
 
   <h1 style="font-family:EB Garamond,serif; font-size:2.5rem; letter-spacing:2px; color:#2c2c2c;">Unheard Voices</h1>
-  <p><em>A meeting place for unspoken thoughts and honest expression.</em></p>
+  <p><em>Where the ineffable finds utterance, and the unheard is finally heard.</em></p>
 </div>
 
 ---
@@ -20,61 +20,57 @@
 
 ---
 
-## What is Unheard Voices?
+## A Sanctuary for the Seldom Spoken
 
-Unheard Voices is not merely a platform; it is a haven for the stories we carry quietly. Here, you are invited to set aside the need for perfection, applause, or trends. Your story is liberated from the tyranny of numbers. It is celebrated for its honesty, its quiet courage, and the sincerity of its heart.
+Welcome to **Unheard Voices**—a digital sanctum for the unvarnished, the uncelebrated, and the unspoken. Here, the cacophony of metrics and the tyranny of trends are banished, replaced by a tranquil agora where candour and vulnerability are not merely permitted, but venerated. Whether you are a writer, a reader, or a wanderer in search of solace, you will find here a tapestry of narratives woven from the gossamer threads of sincerity and introspection.
 
-Within these digital walls, every voice—no matter how soft—is heard and cherished. This is a gentle place where your story is welcome, just as it is.
+### For the Literary Artisan
 
-<div align="center">
-  <img src="client/public/exploreimg.png" alt="Explore Stories" style="width:60%; border-radius: 12px; box-shadow: 0 4px 16px rgba(0,0,0,0.12); margin: 2rem 0;" />
-</div>
-
----
-
-## Who is this for?
-
-**For Writers:**
-> Let your thoughts wander without worry or expectation. Your words matter, whether they are polished or raw. This is a gentle place where your story is welcome, just as it is.
+Unshackle your thoughts from the procrustean bed of perfection. Here, your words—be they nascent or nuanced—are received with equanimity. Relinquish the performative, embrace the authentic, and let your narrative meander as it must.
 
 <div align="center">
-  <img src="client/public/writeimg.png" alt="Write Your Story" style="width:60%; border-radius: 12px; box-shadow: 0 4px 16px rgba(0,0,0,0.12); margin: 2rem 0;" />
+  <img src="client/public/writeimg.png" alt="Write Your Story" style="width:100%; border-radius: 16px; box-shadow: 0 8px 32px rgba(0,0,0,0.25); margin-bottom: 2rem;" />
 </div>
 
-**For Readers:**
-> Discover stories shared with trust and honesty. Every story, no matter how simple or unfinished, has meaning. Let these words find a quiet place in your own heart.
+### For the Discerning Reader
 
-**For Wanderers:**
-> If you are searching for connection, for understanding, or simply for a moment of rest, you are welcome here.
+Traverse a compendium of stories unencumbered by artifice. Each tale, whether a mere whisper or a resounding declaration, is imbued with the quiet dignity of truth. Let these words, unpretentious and unfiltered, find their echo in the chambers of your own experience.
 
----
+<div align="center">
+  <img src="client/public/exploreimg.png" alt="Explore Stories" style="width:100%; border-radius: 16px; box-shadow: 0 8px 32px rgba(0,0,0,0.25); margin-bottom: 2rem;" />
+</div>
 
-## Our Promise
+### For the Peripatetic Soul
 
-- We do **not** track your clicks, sell your story, or chase what is popular.
-- We are here for what is real, for what matters.
-- Your anonymity is our priority—each story is posted without names, and your identity remains yours alone.
-- Our backend is designed to protect you: every post is anonymous, every visit is private, and moderation is gentle but firm, ensuring this space remains safe for all.
-
-> If your heart needs to speak, or simply to rest, you are always welcome here.
+If you seek connection, comprehension, or simply a moment’s respite from the relentless tumult of the quotidian, you are entreated to linger. Here, empathy is currency, and understanding is the lingua franca.
 
 ---
 
-## Our Shared Values
+## Our Covenant
 
-- **Respect every voice.**
-- **Protect anonymity—never share identifying details, yours or others’.**
-- **Support without judgment.**
-- **Express authentically, but mindfully.**
-- **No personal attacks, hate, or explicit content. This is a gentle place.**
+- **Anonymity as Aegis:** Your identity is sacrosanct. Every story is posted sans attribution; your privacy is inviolable.
+- **No Surveillance, No Subterfuge:** We eschew analytics, eschew commodification, and abjure the pursuit of virality.
+- **Gentle Stewardship:** Moderation is exercised with a velvet glove—firm yet compassionate—to preserve the sanctity of this space.
+
+> Should your heart yearn to speak, or simply to repose, you shall find sanctuary here.
+
+---
+
+## The Ethos We Uphold
+
+- **Reverence for every utterance.**
+- **Anonymity above all—never divulge identities.**
+- **Support, never censure.**
+- **Authenticity, tempered with mindfulness.**
+- **Zero tolerance for vitriol or explicitness.**
 
 ---
 
 ## Before You Share
 
-- Is this true to your experience?
-- Could these words resonate with others?
-- Have you removed any identifying details?
+- Is this a distillation of your genuine experience?
+- Might your words resonate, console, or illuminate?
+- Have you expunged all vestiges of personal identification?
 
 ---
 
@@ -85,5 +81,5 @@ Within these digital walls, every voice—no matter how soft—is heard and cher
 ---
 
 <p align="center" style="color:#b1a89c; font-size:1.1rem; margin-top:2rem;">
-  <i>Unheard Voices is a labor of care. Add your voice to the quiet chorus.</i>
+  <i>Unheard Voices is a labour of care. Add your voice to the quiet chorus.</i>
 </p> 
