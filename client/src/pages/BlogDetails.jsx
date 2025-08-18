@@ -71,37 +71,18 @@ export default function BlogDetails() {
   }, [slug]);
 
   useEffect(() => {
-    // Inject grain and background CSS only once
+    // Inject animations CSS only once
     if (!document.getElementById('blogdetails-animations')) {
       const style = document.createElement('style');
       style.id = 'blogdetails-animations';
       style.innerHTML = `
-        .blog-bg {
-          position: fixed;
-          inset: 0;
-          z-index: 0;
-          width: 100vw;
-          height: 100vh;
-          object-fit: cover;
-          filter: brightness(0.7) blur(2px) grayscale(0.1);
-          pointer-events: none;
+        @keyframes drawLine {
+          to { stroke-dashoffset: 0; }
         }
-        .blog-grain {
-          position: fixed;
-          inset: 0;
-          z-index: 1;
-          width: 100vw;
-          height: 100vh;
-          pointer-events: none;
-          background-image: url('data:image/svg+xml;utf8,<svg width="400" height="300" xmlns="http://www.w3.org/2000/svg"><filter id="grain"><feTurbulence type="fractalNoise" baseFrequency="0.8" numOctaves="2" stitchTiles="stitch"/></filter><rect width="100%" height="100%" fill="white"/><rect width="100%" height="100%" filter="url(%23grain)" opacity="0.08"/></svg>');
-          background-size: cover;
-          mix-blend-mode: multiply;
-        }
-        .blog-content-art {
-          background: rgba(249, 247, 243, 0.98);
-          border-radius: 2rem;
-          box-shadow: 0 2px 16px 0 rgba(180, 170, 140, 0.07);
-          border: 1.5px solid #e5ded7;
+        .hand-drawn-line {
+          stroke-dasharray: 800;
+          stroke-dashoffset: 800;
+          animation: drawLine 1.2s cubic-bezier(0.77,0,0.18,1) forwards;
         }
         @keyframes drawLine {
           to { stroke-dashoffset: 0; }
@@ -141,15 +122,22 @@ export default function BlogDetails() {
   // const totalVotes = voteCounts.yes + voteCounts.no;
 
   return (
-    <>
+    <div className="min-h-screen relative">
       <Helmet>
         <title>{blog?.title || "Blog Post"} | Unheard Voices</title>
       </Helmet>
-      {/* Artistic background and grain overlays */}
-      <img src={exploreHero} alt="Background" className="blog-bg" />
-      <div className="absolute inset-0 z-10 pointer-events-none" style={{background: 'linear-gradient(to bottom, rgba(255,255,255,0.82), rgba(255,255,255,0.75))', backdropFilter: 'blur(2.5px)'}} />
-      <div className="blog-grain" />
-      <div className="relative z-20 w-full max-w-xl mx-auto px-4 sm:px-6 py-8 blog-content-art mt-10 mb-16 flex flex-col justify-center items-center" style={{ boxSizing: 'border-box', width: '100%' }}>
+      {/* Fixed background with overlay */}
+      <div className="fixed inset-0 w-full h-full">
+        <img src={exploreHero} alt="Background" className="w-full h-full object-cover filter brightness-95" />
+        <div className="absolute inset-0 bg-white/50 backdrop-blur-[2px]"></div>
+      </div>
+      
+      {/* Content overlay */}
+      <div className="relative z-10 min-h-screen">
+        <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-8">
+          <div className="max-w-3xl mx-auto">
+            {/* Main blog content */}
+            <div className="bg-white rounded-2xl px-5 sm:px-8 py-8 sm:py-10 shadow-lg">
         <div className="w-full flex justify-start mb-6">
           <Link to="/explore" className="text-[#7c6f5a] hover:text-[#5c5343] text-base font-medium bg-[#f7f4ef] px-4 py-2 rounded-full shadow-sm transition">
             ← Back to Explore
@@ -183,23 +171,24 @@ export default function BlogDetails() {
           </div>
         </div>
       </div>
-      {/* Recommendations */}
-      <div className="max-w-4xl mx-auto px-4 mt-12">
-        <h2 className="text-2xl font-bold mb-6">Recommended Blogs</h2>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          </div>
+          {/* Recommendations */}
+          <div className="mt-16">
+            <h2 className="text-2xl font-serif font-bold text-gray-800 mb-8">Recommended Blogs</h2>
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
           {recommendations.map((rec) => (
             <Link
               key={rec.slug}
               to={`/explore/${rec.slug}`}
-              className="block group relative bg-gradient-to-br from-white to-blue-50/30 border border-gray-200 rounded-xl shadow transition-all duration-200 hover:shadow-xl hover:border-blue-200 hover:scale-[1.03] overflow-hidden"
+              className="block group relative bg-white rounded-xl p-4 shadow-md transition-all duration-200 hover:shadow-lg hover:translate-y-[-2px] overflow-hidden"
             >
               {/* Feather watermark */}
               <svg className="absolute bottom-3 right-3 w-8 h-8 text-blue-100 opacity-40 pointer-events-none" fill="none" viewBox="0 0 32 32"><path d="M6 28 L10 24 L14 20 L18 16 L22 12 L26 10 L28 12 L26 16 L22 20 L18 24 L14 28 L10 30 L6 28" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round"/></svg>
-              <div className="p-7 pl-6 flex flex-col min-h-[120px]">
-                <span className="text-xs text-gray-400 italic mb-2">{new Date(rec.createdAt).toLocaleDateString()}</span>
-                <h3 className="text-xl font-serif font-bold text-gray-900 mb-1 group-hover:underline transition-all duration-200 line-clamp-2">{rec.title}</h3>
-                <div className="w-8 border-t border-gray-200 my-2" />
-                <div className="text-gray-600 text-base italic mb-3 line-clamp-2">
+              <div className="p-5 sm:p-6 flex flex-col min-h-[120px]">
+                <span className="text-xs text-[#b1a89c] italic mb-2 font-serif">{new Date(rec.createdAt).toLocaleDateString()}</span>
+                <h3 className="text-lg sm:text-xl font-serif font-bold text-[#3d372f] mb-2 group-hover:text-[#5c5343] transition-all duration-200 line-clamp-2">{rec.title}</h3>
+                <div className="w-12 border-t border-[#e5ded7] my-2 sm:my-3" />
+                <div className="text-[#7c6f5a] text-sm sm:text-base font-serif italic mb-2 sm:mb-3 line-clamp-2">
                   <div
                     dangerouslySetInnerHTML={{
                       __html: rec.content.substring(0, 80) + "..."
@@ -209,23 +198,34 @@ export default function BlogDetails() {
               </div>
             </Link>
           ))}
+            </div>
+          </div>
         </div>
       </div>
       <style>{`
         @media (max-width: 640px) {
           .blog-content-art {
-            max-width: 100vw;
-            margin-left: auto;
-            margin-right: auto;
-            padding-left: 1rem;
-            padding-right: 1rem;
             border-radius: 1.2rem;
           }
+          .prose {
+            font-size: 0.95rem;
+          }
+          .prose p {
+            margin-top: 0.75rem;
+            margin-bottom: 0.75rem;
+          }
         }
-        .blog-bg {
-          filter: brightness(0.6) blur(8px) grayscale(0.08) !important;
+        @media (max-width: 480px) {
+          .container {
+            padding-left: 1rem;
+            padding-right: 1rem;
+          }
+          .blog-content-art {
+            padding-left: 1.25rem;
+            padding-right: 1.25rem;
+          }
         }
       `}</style>
-    </>
+    </div>
   );
 }
