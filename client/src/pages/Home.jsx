@@ -42,7 +42,7 @@ export default function Home() {
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             <div className="bg-white rounded-xl shadow-lg p-8 hover:shadow-xl transition-shadow duration-300">
               <h3 className="font-bold text-xl mb-4">Whispers from Within</h3>
-              <p className="text-gray-600">Curated stories that resonate with the soul—each one a testament to the courage of anonymous expression and the beauty of unfiltered truth.</p>
+              <p className="text-gray-600">Curated stories that resonate with the soul each one a testament to the courage of anonymous expression and the beauty of unfiltered truth.</p>
             </div>
             <div className="bg-white rounded-xl shadow-lg p-8 hover:shadow-xl transition-shadow duration-300">
               <h3 className="font-bold text-xl mb-4">Voices in the Dark</h3>
