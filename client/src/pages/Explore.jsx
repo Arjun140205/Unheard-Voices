@@ -161,7 +161,7 @@ export default function Explore() {
             Discover Stories, Find Yourself
             </h1>
           <p className="text-lg sm:text-xl text-white text-center max-w-2xl drop-shadow-md">
-            Step into a world of anonymous voices and heartfelt confessions. Every story is a window into another soul.
+            Step into a world of anonymous voices and heartfelt confessions where every story is a window into another soul.
             </p>
           </div>
       </section>
