@@ -39,10 +39,11 @@ const Navbar = () => {
               </Link>
               <Link 
                 to="/admin-portal" 
-                  className="pl-3 sm:pl-6 py-1 text-[#2c2c2c]/50 text-sm sm:text-[15px] font-medium tracking-wide hover:text-[#2c2c2c]/80 transition-colors"
+                  className="pl-3 sm:pl-6 py-1 text-[#2c2c2c]/50 text-[11px] sm:text-[15px] font-medium tracking-wide hover:text-[#2c2c2c]/80 transition-colors min-w-[42px] text-center leading-tight"
                 style={{ fontFamily: 'EB Garamond' }}
               >
-                For Admins
+                <span className="xs:hidden inline-block leading-[1.1]">For<br />Admins</span>
+                <span className="hidden xs:inline">For Admins</span>
               </Link>
               </div>
             </div>
