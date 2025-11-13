@@ -53,9 +53,12 @@ const Footer = () => {
         {/* Bottom Bar */}
         <div className="pt-8 border-t border-gray-200">
           <div className="flex flex-col md:flex-row justify-between items-center">
-            <p className="text-sm text-gray-600">
+            <Link 
+              to="/copyright" 
+              className="text-sm text-gray-600 hover:text-gray-900 transition-colors"
+            >
               © {year} Unheard Voices. All rights reserved.
-            </p>
+            </Link>
             <div className="flex space-x-6 mt-4 md:mt-0">
               <a
                 href="https://www.instagram.com/un.heardvoices?igsh=MXN4Y2F3dHByMXBvMQ=="
