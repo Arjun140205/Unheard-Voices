@@ -20,6 +20,7 @@ const CommunityGuidelines = lazy(() => import("./pages/CommunityGuidelines"));
 const PrivacyPolicy = lazy(() => import("./pages/PrivacyPolicy"));
 const TermsOfService = lazy(() => import("./pages/TermsOfService"));
 const CookiePolicy = lazy(() => import("./pages/CookiePolicy"));
+const Copyright = lazy(() => import("./pages/Copyright"));
 const AdminPortal = lazy(() => import("./pages/AdminPortal"));
 
 // RouteChangeLoader component to handle route transitions
@@ -65,6 +66,7 @@ function App() {
                       <Route path="/privacy" element={<PrivacyPolicy />} />
                       <Route path="/terms" element={<TermsOfService />} />
                       <Route path="/cookies" element={<CookiePolicy />} />
+                      <Route path="/copyright" element={<Copyright />} />
                       <Route path="/admin-portal" element={<AdminPortal />} />
                     </Routes>
                   </Suspense>
