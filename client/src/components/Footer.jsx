@@ -66,6 +66,15 @@ const Footer = () => {
                 <i className="fab fa-instagram"></i>
                 <span className="sr-only">Instagram</span>
               </a>
+              <a
+                href="https://www.linkedin.com/in/arjunbir-singh/"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-gray-600 hover:text-gray-900"
+              >
+                <i className="fab fa-linkedin"></i>
+                <span className="sr-only">LinkedIn</span>
+              </a>
             </div>
           </div>
         </div>
