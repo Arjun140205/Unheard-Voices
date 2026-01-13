@@ -1,0 +1,11 @@
+# Environment files
+.env
+.env.local
+.env.*.local
+.env.production
+.env.development
+# Server specific
+server/.env
+server/.env.*
+# Node
+node_modules/
